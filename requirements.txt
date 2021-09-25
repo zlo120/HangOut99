@@ -7,6 +7,8 @@ Flask-Script==2.0.6
 Flask-SQLAlchemy==2.3.2
 Flask-User==1.0.1.5
 Flask-WTF==0.14.2
+flask_bcrypt
+flask_user
 idna==2.8
 itsdangerous==1.1.0
 gunicorn==19.9.0
