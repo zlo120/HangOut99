@@ -1,0 +1,54 @@
+{% extends "template.html" %}
+
+{% block header %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row myForm">
+        
+        <!-- Register form -->
+        <h2 class="mr-5" style="width: 150px; color:white;">Register</h2>
+        <form style="width:500px;" action="" method="POST">            
+
+            {{form.csrf_token}}
+                        
+            <div class="form-group">
+                {{form.email.label (class="white-text")}}
+                {{form.email (class="form-control black-text")}}
+                <!-- <label for="email" style="color:white;">Email:</label>
+                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email" required/> -->
+            </div>
+
+            <div class="form-group">
+                {{form.username.label (class="white-text")}}
+                {{form.username (class="form-control black-text")}}
+                <!-- <label for="username" style="color:white;">Username:</label>
+                <input type="username" class="form-control" id="username" placeholder="Enter username" name="username" required/> -->
+            </div>
+
+            <div class="form-group">
+                {{form.password.label (class="white-text")}}
+                {{form.password (class="form-control black-text")}}
+              <!-- <label for="pwd" style="color:white;">Password:</label>
+              <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd" required/> -->
+            </div>
+
+            <div class="form-group">
+                {{form.confirm.label (class="white-text")}}
+                {{form.confirm (class="form-control black-text")}}
+              <!-- <label for="cpwd" style="color:white;">Confirm Password:</label>
+              <input type="password" class="form-control" id="cpwd" placeholder="Confirm password" name="cpwd" required/> -->
+            </div>
+
+            <a style="color: white;" href="{{ url_for('user.login') }}">Already have an account? Login here</a>
+            <!-- <button type="submit" class="ml-3 btn btn-primary">Submit</button> -->
+            {{form.submit (class="btn btn-primary white-text")}}
+         
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}display:none;{% endblock %}

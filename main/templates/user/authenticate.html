@@ -1,0 +1,31 @@
+{% extends "template.html" %}
+
+{% block header %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h2 style="width: 100%; color:white;">Please enter your authentication code</h2>
+    <div class="row">
+        
+        <!-- Register form -->
+        
+        <form style="width:500px;" action="", method="POST">
+          {{form.csrf_token}}
+            <!-- keeps the label and text in a group vertically stacked--> 
+            <div class="ml-3 form-group">
+              <!-- <label for="code" style="color:white;">Authentication code:</label>
+              <input type="code" class="form-control" id="code" placeholder="0000" name="code" required/> -->
+              {{form.token.label (class="white-text")}}
+              {{form.token (class="form-control black-text")}}
+            </div>
+        
+            <!-- <button type="submit" class="ml-3 btn btn-primary">Submit</button> -->
+            {{form.submit (class="ml-3 btn btn-primary")}}
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}display:none;{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'template.html' %}
+
+{% block body %}
+
+<div class="container">
+  <div class="row create">
+    <form style="width: 100%;" action="" method="POST">
+      {{ form.csrf_token }}
+      
+        <div class="form-group">
+          <div class="row">
+                <div class="white-text col-lg-6">
+                  
+                    <!-- <label for="event-title" >Title * </label>
+                    <input style="width:100%;" class="form-control mb-4 mr-3" id="event-title" type="text" required /> -->
+                    {{form.title.label (class="white-text")}}
+                    {{form.title (class="form-control black-text mb-4 mr-3")}}
+
+                    <!-- <label class="mt-2" for="description" >Description * </label>
+                    <textarea style="resize: none;" type="text" class="text form-control mb-5" id="description" rows="10" name="description" required></textarea> -->
+                    {{form.description.label (class="white-text")}}
+                    {{form.description (class="form-control black-text myTextAreaField mb-5")}}
+                      
+                </div>
+
+                <div class="white-text col-lg-6">
+                  <!-- <label class="float-right" for="birthdaytime">Pick the date and time*:</label><br><br>
+                  <input class="float-right" type="datetime-local" id="birthdaytime" name="birthdaytime">             -->
+                  {{form.date.label (class="white-text mr-5")}}
+                  {{form.date (class="form-control black-text mr-5")}}
+
+                  {{form.time.label (class="white-text mr-5")}}
+                  {{form.time (class="form-control black-text mr-5")}}
+
+                  {{form.submit (class="btn btn-primary white-text mt-3 ")}}
+                </div>
+            </div>
+        </div>
+    </form>       
+  </div>
+</div>
+{% endblock %}
+
+{% block footer %}display:none;{% endblock %}

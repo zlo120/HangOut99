@@ -1,0 +1,45 @@
+{% extends "template.html" %}
+
+{% block header %}
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row myForm">
+        
+        <!-- Register form -->
+        <h2 class="mr-5" style="width: 150px; color:white;">Log in</h2><br/><br/>
+        <form style="width:500px;" action="", method="POST">
+
+          {{form.csrf_token}}
+            
+            <!-- keeps the label and text in a group vertically stacked--> 
+            <div class="form-group">
+
+              {{form.username.label (class="white-text")}}
+              {{form.username (class="black-text form-control")}}
+
+              <!-- <label for="username" style="color:white;">Username:</label>
+              <input type="username" class="form-control" id="username" placeholder="Enter username" name="username" required/> -->
+
+            </div>
+          
+            <div class="form-group">
+              {{form.password.label (class="white-text")}}
+              {{form.password (class="black-text form-control")}}
+              <!-- <label for="pwd" style="color:white;">Password:</label>
+              <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pwd" required/> -->
+            </div>
+
+            <a style="color: white;" href="{{ url_for('user.register') }}">Don't have an account? Register here</a>
+        
+            <!-- <button type="submit" class="ml-3 btn btn-primary">Submit</button> -->
+            {{form.submit (class="btn btn-primary")}}
+         
+        </form>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}display:none;{% endblock %}

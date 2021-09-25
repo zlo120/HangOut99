@@ -1,0 +1,31 @@
+{% extends "template.html" %}
+
+{% block header %}
+<div id="mobileImage">
+    <img class="d-block w-100" src="{{ url_for('static', filename='img/MobileImage.jpg') }}" alt="Welcoming Image">
+    <h3 class="d-flex justify-content-center">Welcome to GamerIO!</h3>
+</div>
+
+<div id="desktopImage">
+    <img class="d-block w-100" src="{{ url_for('static', filename='img/bg1.jpg') }}" alt="Welcoming Image">
+    <h3 class="d-flex justify-content-center">Welcome to GamerIO!</h3>
+</div>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-6 d-flex justify-content-center">
+            <a class="Option1" style="text-decoration: none; color:#fff;" href="#">Register an account</a>
+        </div>
+        <div class="col-lg-6 d-flex justify-content-center" >
+            <a class="Option2" style="text-decoration: none; color:#fff;" href="#">Login to your account</a>
+        </div>
+
+        <div class="col-md-12">
+            <h1 class="mt-5 mb-5 d-flex justify-content-center" style="font-family: 'Source Code Pro', monospace; color:#fff;"> Start exploring events! </h1>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
