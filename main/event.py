@@ -1,6 +1,6 @@
 from flask import request, render_template, redirect, Blueprint
 from flask_login import login_required, current_user
-from .models import User
+from .models import User, Event, HangOutGroup
 from .form import CreateEvent
 from .utils import createDateTimeObject
 
@@ -38,4 +38,4 @@ def create_event():
     #     datetime = request.values.get("datetime")
     #     time_obj = createDateTimeObject(datetime)
 
-    return render_template('create.html', form = form)
+    return render_template('create.html', form = form, type="event")

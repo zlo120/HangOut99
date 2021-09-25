@@ -26,3 +26,7 @@ class CreateEvent(FlaskForm):
     date = DateField("Date", validators=[InputRequired()] )
     time = TimeField("Time", validators=[InputRequired()] )
     submit = SubmitField("Submit")
+
+class CreateGroup(FlaskForm):
+    name = StringField ("Name *", validators=[InputRequired()], render_kw={"placeholder": "Name of the group"} )
+    submit = SubmitField("Create")

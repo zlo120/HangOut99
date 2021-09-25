@@ -1,0 +1,199 @@
+* {
+    color: white;
+}
+
+header {
+    background-color: rgb(22, 0, 22);
+}
+
+body {
+    background-color: #160c1b;
+}
+
+footer { 
+    background-color: rgb(22, 0, 22);
+    padding-bottom: 3em;
+}
+
+input, select, option {
+    color: black;
+}
+
+hr { 
+    border: 0; 
+    border-top: 1px solid white;
+}
+
+/* Alert styling */
+.myAlert {
+    width : 30%;
+    position: absolute;
+    top: 5%;
+    height: 7%;
+    
+}
+
+.myAlert p {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: black;
+}
+
+.myAlert path {
+    color: black;
+}
+
+.myAlert button {
+    position: relative;
+    top: 45%;
+    transform: translateY(-50%);
+}
+
+/* Navbar styling */
+.myNavBar {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    position: relative;
+}
+
+.left-item {
+    padding-left: 2em;
+    padding-right: 2.5em;
+}
+
+.rightNav {
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+.dropdown:hover .dropdown-menu {
+    display:block;
+    margin-top: 0; 
+}
+
+.dropdown-menu {
+    background-color: rgb(22, 0, 22);
+}
+
+.dropdown-item:hover {
+    background-color: grey;
+}
+
+
+/* Organising styling by pages
+
+   home -> event -> create -> history 
+
+   Index page styling */
+
+.Option1 {
+    background-image: url("img/genre.jpg");
+    border: none;
+    color: white;
+    padding: 50px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    height: 130px;
+    width: 300px;
+    border-radius: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: 2em;
+    text-decoration: none;
+}
+
+.Option2 {
+    background-image: url("img/game.jpg");
+    border: none;
+    color: white;
+    padding: 50px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    height: 130px;
+    width: 300px;
+    border-radius: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: 2em;
+    text-decoration: none;
+}
+
+.Option3 {
+    background-image: url("img/event.jpg");
+    border: none;
+    color: white;
+    padding: 50px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    height: 130px;
+    width: 300px;
+    border-radius: 10px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: 2em;
+    text-decoration: none;
+}
+
+#desktopImage h3{
+    height:0px;
+    font-size: 5em;
+    position:relative; 
+    top: -200px; color:white; 
+}
+
+.mute {
+    color: #a3a3a3;
+}
+
+.img-carousel { 
+    min-height: 425px; 
+}
+
+
+/* Event page styling */
+.event {
+    position: relative;
+    top: 50px;
+    padding-bottom: 100px;
+}
+
+.event-display .card {
+    max-width: 600px;
+}
+
+.event-display img {
+    width: 600px;
+}
+
+.comment {
+    border-radius: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.comment-contents {
+    padding-left: 20px;
+    padding-top: 15px;
+}
+
+/* History page stlying */
+.booking-object {
+    border-radius: 20px;
+    padding: 10px;
+    border: 0px;
+    margin: 0px;
+}

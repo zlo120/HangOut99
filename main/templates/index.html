@@ -1,7 +1,6 @@
 {% extends "template.html" %}
 
 {% block header %}
-
 {% if current_user.is_authenticated %}
 
 <div id="mobileImage">
@@ -35,13 +34,10 @@
 {% if current_user.is_authenticated %}
 
 <div class="container">
-    <a href="{{ url_for('event.create_event') }}" class="mt-3 btn btn-primary">Create an event</a>
+    <a href="{{ url_for('hangout.create_hangout') }}" class="mt-3 btn btn-primary">Create a hangout group</a>
+    <a href="{{ url_for('event.create_event') }}" class="ml-3 mt-3 btn btn-secondary">Create an event</a>
     <h1 class="mt-5 mb-3" style="color: white;">Lets see what's on</h1>
     
-    <div class="row">
-                    
-    </div>
-</div>
 
 {% else %}
 
@@ -54,7 +50,10 @@
             <a class="Option2" style="text-decoration: none; color:#fff;" href="{{ url_for('user.login') }}">Login to your account</a>
         </div>
     </div>
-</div>
 
 {% endif %}
+
+    
+</div>
+
 {% endblock %}

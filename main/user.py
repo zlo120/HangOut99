@@ -4,7 +4,7 @@ from flask_wtf import FlaskForm
 
 from . import bcrypt, db
 from .utils import createDateTimeObject, send_email
-from .models import User, Tokens
+from .models import User, Token
 from .form import Authenticate, Register, Login
 
 import csv, random
@@ -22,7 +22,7 @@ def authenticate():
     if form.validate_on_submit():
         token = request.form['token']
 
-        confirmedToken = Tokens.query.filter_by(UserToken = token).first()
+        confirmedToken = Token.query.filter_by(UserToken = token).first()
 
         if confirmedToken:
             # Update user row IsValidated to True
@@ -91,7 +91,7 @@ def register():
         token = random.randint(1000,9999)
 
         # Store the token        
-        token_obj = Tokens (
+        token_obj = Token (
             Email = form_email,
             UserToken = token            
         )
@@ -99,7 +99,7 @@ def register():
         db.session.add(token_obj)
         db.session.commit()
 
-        send_email(token, form_email)
+        # send_email(token, form_email)
 
         login_user(user, remember = True)
         flash("You are now logged in!")

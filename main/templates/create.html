@@ -7,6 +7,8 @@
     <form style="width: 100%;" action="" method="POST">
       {{ form.csrf_token }}
       
+      {% if type == "event" %}
+
         <div class="form-group">
           <div class="row">
                 <div class="white-text col-lg-6">
@@ -36,6 +38,29 @@
                 </div>
             </div>
         </div>
+
+      {% elif type == "hangoutgroup" %}
+
+        <div class="form-group">
+          <div class="row">
+                <div class="white-text col-lg-6">
+                  
+                    <!-- <label for="event-title" >Title * </label>
+                    <input style="width:100%;" class="form-control mb-4 mr-3" id="event-title" type="text" required /> -->
+                    {{form.name.label (class="white-text")}}
+                    {{form.name (class="form-control black-text mb-4 mr-3")}}
+                     
+                </div>
+
+                <div class="white-text col-lg-6">
+                  <br>
+                  {{form.submit (class="btn btn-primary white-text mt-2")}}
+                </div>
+            </div>
+        </div>
+
+      {% endif %}
+
     </form>       
   </div>
 </div>
