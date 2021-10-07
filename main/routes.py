@@ -35,7 +35,7 @@ def index():
     
     if current_user.is_authenticated:
         user = User.query.filter_by(Email = current_user.Email).first()
-        temp = getUserGroups(user.ID)
+        temp = user.hangoutgroup
 
         for row in temp:
             hangout = HangOutGroup.query.filter_by(Name = row[1]).first()

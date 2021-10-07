@@ -15,7 +15,7 @@ def user_loader(id):
 
 # Group related functions
 def getUserGroups(id):
-    return db.engine.execute(f"select u.Username as UserName, h.Name as HangoutName from users as u inner join user_identifier as ui on (ui.user_id = u.ID) inner join hangoutgroups as h on (h.ID = ui.hangoutgroup_id) where (u.ID = {id});")
+    return db.engine.execute(f"select u.Username as UserName, h.Name as HangoutName from \"users\" as u inner join user_identifier as ui on (ui.user_id = u.ID) inner join \"hangoutgroups\" as h on (h.ID = ui.hangoutgroup_id) where (u.ID = {id});")
 
 def getHangOutID(user, group):
     groups = getUserGroups(user.ID)
