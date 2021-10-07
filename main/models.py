@@ -102,7 +102,7 @@ class Photo(db.Model):
 class Comment(db.Model):
     __tablename__ = "comments"
     ID = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement=True)
-    Creator_ID = db.Column(db.Integer, db.ForeignKey('users.Username'))
+    Creator_ID = db.Column(db.String(256), db.ForeignKey('users.Username'))
     Content = db.Column(db.String(256), nullable = False)
 
     Event_ID = db.Column(db.Integer, db.ForeignKey('events.ID'))
