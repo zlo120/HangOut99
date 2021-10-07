@@ -5,7 +5,7 @@ from flask_wtf import FlaskForm
 from . import bcrypt, db
 from .utils import createDateTimeObject, send_email
 from .models import User
-from .form import Authenticate, Register, Login
+from .form import Register, Login
 
 import csv, random
 
