@@ -75,7 +75,7 @@ def view(id):
 
     base_url = request.base_url
     temp = base_url.index("hangout")
-    base_url = base_url[0:temp - 1]
+    base_url = "https://hangout99.herokuapp.com/"
 
     return render_template("hangout.html", type="view", group = HangOutGroup.query.filter_by(ID = id).first(), base_url = base_url)
 

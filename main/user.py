@@ -167,8 +167,6 @@ def account(id):
     hasCreatedGroup = False
     hasCreatedEvent = False
 
-    print(f"\n\n{this_user.event}\n\n")
-
     for group in this_user.hangoutgroup:
         if this_user.ID == group.Creator_ID:
             hasCreatedGroup = True

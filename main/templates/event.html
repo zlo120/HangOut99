@@ -13,11 +13,12 @@
 
 <div class="container">
     <div class="row">
-
         <div class="col-lg-8">
             <h1 class="mt-5" style="color: white;">{{event.Name}} {% if not event.DateTime %}(PLAN){% endif %} </h1>
 
             <p style="margin-top:2%; font-size:1.25em;">{{event.Description}}</p>
+
+            <hr>
 
             <strong>
                 {% if event.DateTime %}
@@ -27,9 +28,11 @@
                 This is still a plan. Hasn't got a date yet.
                 {% endif %}            
             </strong>    
-
+            <br><br>
             {% if event.Location %}
-            <p>Location : {{event.Location}}</p>
+
+            <h2>Location</h2>
+            <p>{{event.Location}}</p>
             <a href="{{event.Link}}" target=”_blank” style="color:white;">Google maps link</a>
             {% endif %}
             
