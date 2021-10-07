@@ -37,8 +37,8 @@ def index():
         user = User.query.filter_by(Email = current_user.Email).first()
         temp = user.hangoutgroup
 
-        for row in temp:
-            hangout = HangOutGroup.query.filter_by(Name = row[1]).first()
+        for group in temp:
+            hangout = HangOutGroup.query.filter_by(Name = group.Name).first()
             groups.append(hangout)
             
     latest_event = None
