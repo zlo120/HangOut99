@@ -94,7 +94,7 @@ class Event(db.Model):
 class Photo(db.Model):
     __tablename__ = "photos"
     ID = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement=True)
-    Creator_ID = db.Column(db.Integer, db.ForeignKey('users.Username'))
+    Creator_ID = db.Column(db.String(256), db.ForeignKey('users.Username'))
     Image = db.Column(db.String(400), nullable = False)
 
     Event_ID = db.Column(db.Integer, db.ForeignKey('events.ID'))
