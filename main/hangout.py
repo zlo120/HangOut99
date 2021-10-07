@@ -4,7 +4,7 @@ from sqlalchemy import exc
 from sqlalchemy.engine import url
 
 from .models import User, Event, HangOutGroup
-from .form import CreateGroup, JoinGroup, EditGroup
+from .form import CreateGroup, JoinGroup, editGroup
 from .utils import randomString
 
 from . import db, login_manager
@@ -136,7 +136,7 @@ def explore():
 def edit(id):
     group = HangOutGroup.query.filter_by(ID = id).first()
 
-    form = EditGroup()
+    form = editGroup(group)
 
     if form.validate_on_submit():
         try:
@@ -154,4 +154,4 @@ def edit(id):
             flash("A group with that name already exists!")
             return redirect(url_for('hangout.edit', id = id))
 
-    return render_template("hangout.html", type="edit", form = form)
+    return render_template("hangout.html", type="edit", form = form, group = group)

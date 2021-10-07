@@ -85,10 +85,14 @@ class JoinGroup(FlaskForm):
     pin = IntegerField ("Pin *", validators=[InputRequired()], render_kw={"placeholder": "Pin"} )
     submit = SubmitField("Submit")
 
-class EditGroup(FlaskForm):
-    name = StringField ("Name *", validators=[InputRequired()], render_kw={"placeholder": "Name of the group"} ) 
-    pin = IntegerField("Pin (optional)", validators=[Optional()], render_kw={"placeholder": "Pin (optional)"})
-    submit = SubmitField("Submit")
+def editGroup(group):
+
+    class EditGroup(FlaskForm):
+        name = StringField ("Name *", validators=[InputRequired()], render_kw={"value" : group.Name, "placeholder": "Name of the group"} ) 
+        pin = IntegerField("Pin (optional)", validators=[Optional()], render_kw={"value" : group.Pin,"placeholder": "Pin (optional)"})
+        submit = SubmitField("Submit")
+
+    return EditGroup()
 
 ALLOWED_FILE = {'PNG','JPG','png','jpg', 'JPEG', 'jpeg'}
 

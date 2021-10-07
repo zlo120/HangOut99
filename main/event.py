@@ -323,6 +323,10 @@ def edit(id):
         this_event.Name = form.title.data
         this_event.Description = form.description.data
         
+        if form.location.data:
+            this_event.Location = form.location.data
+            this_event.Link = f"https://maps.google.com/?q={form.location.data}"
+        
         date_time = createDateTimeObject( str(form.date.data) + ' ' + str(form.time.data) )
 
         if date_time:
