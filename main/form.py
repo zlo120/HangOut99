@@ -31,7 +31,7 @@ def groups(current_user):
     return_this = []
 
     for group in groups:
-        return_this.append((group[1], group[1]))
+        return_this.append((group, group))
 
     return return_this
 
