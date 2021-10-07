@@ -10,19 +10,19 @@ from wtforms.validators import *
 from datetime import datetime
 
 from .models import Event
-from .utils import user_loader, getUserGroups
+from .utils import user_loader
 
 # choices = [(data, display)]
 
 def groups(current_user):
     this_user = user_loader(current_user.get_id())
 
-    user_groups = getUserGroups(this_user.ID)
+    user_groups = this_user.hangoutgroup
 
     groups = []
 
-    for row in user_groups:
-        groups.append(row)
+    for group in user_groups:
+        groups.append(group)
 
     if groups == []:
         

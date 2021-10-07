@@ -5,8 +5,6 @@ from flask_login import current_user, login_user
 from flask_login.utils import login_required, login_user, logout_user
 from . import app, bcrypt, db, login_manager
 from .models import User, HangOutGroup, Event
-from .utils import getUserGroups, getGroupByEvent
-
 from datetime import datetime
 
 # Load in user

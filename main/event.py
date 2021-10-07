@@ -7,7 +7,7 @@ import os
 from .routes import load_user
 from .models import HangOutGroup, User, Event, Comment, Photo
 from .form import createEventForm, createEditForm, CreateComment, UploadImage
-from .utils import createDateTimeObject, getGroupByEvent, getHangOutID, getUserGroups, user_loader
+from .utils import createDateTimeObject, user_loader
 from . import db
 
 def check_upload_file(form):
@@ -133,12 +133,12 @@ def explore():
     if current_user.is_authenticated:
         this_user = User.query.filter_by(Email = current_user.Email).first()
 
-        temp = getUserGroups(this_user.ID)
+        temp = this_user.hangoutgroup
         groups = []
         events = []
 
         for row in temp:
-            hangout = HangOutGroup.query.filter_by(Name = row[1]).first()
+            hangout = HangOutGroup.query.filter_by(Name = row.Name).first()
             groups.append(hangout)
 
         for group in groups:
@@ -163,11 +163,11 @@ def explore():
 def create_event():
 
     # Get the groups the user is in
-    temp = getUserGroups(current_user.get_id())
+    temp = current_user.hangoutgroup
     groups = []
 
     for row in temp:
-        group = HangOutGroup.query.filter_by(Name = row[1]).first()
+        group = HangOutGroup.query.filter_by(Name = row.Name).first()
         groups.append(group)
 
     if groups == []:
@@ -194,7 +194,7 @@ def create_event():
             Name = form.title.data,
             Description = form.description.data,
             DateTime = datetime,
-            Hangout_ID = getHangOutID(user, form.group.data),
+            Hangout_ID = form.group.data,
             Location = location,
             Link = link
         )
@@ -231,17 +231,16 @@ def event(id):
     isEligible = False
 
     # Get the groups the user is in
-    temp = getUserGroups(this_user.ID)
+    temp = this_user.hangoutgroup
     groups = []
 
     for row in temp:
-        group = HangOutGroup.query.filter_by(Name = row[1]).first()
+        group = HangOutGroup.query.filter_by(Name = row.Name).first()
         groups.append(group)
         
     # Get the group this event is for
     this_event = Event.query.filter_by(ID = id).first()
 
-    # this_group = getGroupByEvent(this_event)
     this_group = this_event.hangoutgroup
 
     if this_group in groups:

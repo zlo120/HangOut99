@@ -14,23 +14,19 @@ def user_loader(id):
 # ('ZacL', 'The bois')
 
 # Group related functions
-def getUserGroups(id):
-    return db.engine.execute(f"select u.Username as UserName, h.Name as HangoutName from \"users\" as u inner join user_identifier as ui on (ui.user_id = u.ID) inner join \"hangoutgroups\" as h on (h.ID = ui.hangoutgroup_id) where (u.ID = {id});")
-
 def getHangOutID(user, group):
-    groups = getUserGroups(user.ID)
+    groups = user.hangoutgroup
     ans = None
 
     for curr_group in groups:
-        if group == curr_group[1]:
-            ans = curr_group[1]
+        if group == curr_group:
+            ans = curr_group
             break
 
-    res = db.engine.execute(f"SELECT ID FROM hangoutgroups WHERE Name = '{ans}'")
-    for row in res:
-        return row[0]
-
-    return None
+    if ans is not None:
+        return group.ID
+    else:
+        return None
 
 def getGroupByEvent(event):
     res = db.engine.execute(f"SELECT Name FROM hangoutgroups WHERE ID = {event.ID};")
