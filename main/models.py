@@ -52,14 +52,6 @@ class User(db.Model):
         """False, as anonymous users aren't supported."""
         return False
 
-class Token(db.Model):
-    __tablename__ = "tokens"
-    Email = db.Column(db.String(256), primary_key = True, nullable = False)
-    UserToken = db.Column(db.String(256))
-
-    def __repr__(self):
-        return f"(Email: {self.Email}, UserToken: {self.Token}) "
-
 class HangOutGroup(db.Model):
     __tablename__ = "hangoutgroups"
     ID = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement=True)

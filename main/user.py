@@ -88,19 +88,6 @@ def register():
         db.session.add(user)
         db.session.commit()
 
-        token = random.randint(1000,9999)
-
-        # Store the token        
-        token_obj = Token (
-            Email = form_email,
-            UserToken = token            
-        )
-
-        db.session.add(token_obj)
-        db.session.commit()
-
-        # send_email(token, form_email)
-
         login_user(user, remember = True)
         flash("You are now logged in!")
         return redirect(url_for('main.index'))
