@@ -26,7 +26,7 @@ class User(db.Model):
     __tablename__ = "users"
     ID = db.Column(db.Integer, primary_key = True, nullable = False, autoincrement=True)
     Email = db.Column(db.String(256), nullable = False)
-    Username = db.Column(db.String(256), nullable = False)
+    Username = db.Column(db.String(256), unique = True, nullable = False)
     Password = db.Column(db.String(256), nullable = False)
     IsValidated = db.Column(db.Boolean, nullable = False)
 	
