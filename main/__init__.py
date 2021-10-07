@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import json
+import os 
 
 app = None
 db = SQLAlchemy()
@@ -31,7 +32,9 @@ def create_app():
 
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'AIzaSyDdkNpKFJt2n8M0gzbWp4q2LbJr1f73rso'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 
+
+    os.environ['DATABASE_URL']
 
     UPLOAD_FOLDER = '/static/image'
     app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER

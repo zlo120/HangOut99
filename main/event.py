@@ -77,8 +77,6 @@ def interested():
 
         db.session.commit()
 
-        print("Added")
-
     return Response("Got it", status=201, mimetype='application/json')
 
 @eventbp.route('/unavailable', methods = ['POST'])
@@ -126,8 +124,6 @@ def unavailable():
             pass
 
         db.session.commit()
-
-        print("Added")
 
     return Response("Got it", status=201, mimetype='application/json')
 
@@ -303,8 +299,6 @@ def delete():
             db.engine.execute(f"DELETE FROM events WHERE ID = {event_id};")
             db.engine.execute(f"DELETE FROM interested_events WHERE user_id = {current_user.get_id()} and event_id = {event_id};")  
             db.engine.execute(f"DELETE FROM unavailable_events WHERE user_id = {current_user.get_id()} and event_id = {event_id};")  
-
-        print("deleted")
             
     return Response("Got it", status=201, mimetype='application/json')
 

@@ -25,7 +25,7 @@ def groups(current_user):
         groups.append(row)
 
     if groups == []:
-        print("Nothing in groups")
+        
         return [("You need to be in a group first", "You need to be in a group first")]
 
     return_this = []

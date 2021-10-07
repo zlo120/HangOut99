@@ -54,8 +54,6 @@ def index():
 
         temp = plans.copy()
 
-        print(temp)
-
         if None not in temp:
 
             events = []
@@ -69,8 +67,6 @@ def index():
             for event in events:
                 event_dates.append( event.DateTime )  
 
-            print(event_dates)
-
             latest_event = None
 
             try:
@@ -80,7 +76,5 @@ def index():
 
             except ValueError:
                 pass
-
-        print(user.event) 
 
     return render_template("index.html", User = user, Event = latest_event, groups = groups)
