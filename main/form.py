@@ -71,10 +71,6 @@ class Login(FlaskForm):
     password = PasswordField("Password", validators=[InputRequired()], render_kw={"placeholder": "Enter password"})
     submit = SubmitField("Login")
 
-class Authenticate(FlaskForm):
-    token = StringField("Authentication Code", validators=[InputRequired()], render_kw={"placeholder": "0000"})
-    submit = SubmitField("Authenticate")
-
 class CreateGroup(FlaskForm):
     name = StringField ("Name *", validators=[InputRequired()], render_kw={"placeholder": "Name of the group"} )
     pin = IntegerField("Pin (optional)", validators=[Optional()], render_kw={"placeholder": "Create a pin for others to join"})
