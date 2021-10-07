@@ -149,6 +149,34 @@ def send():
 
     return "sent"
 
-@userbp.route('/user-id/<user>')
-def user(user):
-    return user
+@userbp.route('/account/<int:id>')
+@login_required
+def account(id):
+
+    this_user = None
+
+    try:
+        this_user = User.query.filter_by(ID = id).first()
+
+    except:
+        return render_template("user/account.html", msg = "This user does not exist...")
+
+    if current_user.get_id() != int(id):
+        return render_template("user/account.html", msg = "You don't have authorization to access this account's details...")
+    
+    hasCreatedGroup = False
+    hasCreatedEvent = False
+
+    print(f"\n\n{this_user.event}\n\n")
+
+    for group in this_user.hangoutgroup:
+        if this_user.ID == group.Creator_ID:
+            hasCreatedGroup = True
+            break
+
+    for event in this_user.event:
+        if this_user.ID == event.Creator_ID:
+            hasCreatedEvent = True
+            break
+    
+    return render_template("user/account.html", msg = None, user = this_user, hasCreatedGroup = hasCreatedGroup, hasCreatedEvent = hasCreatedEvent)

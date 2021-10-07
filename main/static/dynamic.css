@@ -2,7 +2,80 @@
     display:none;
 }
 
+.tutorial-header {
+    font-size: 4em;
+}
+
+.tutorial-mobile {
+    display: none;
+}
+
+.mobile-menu {
+    display: none;
+}
+
 @media (max-width: 992px) { 
+
+    /* Event styling */
+    .event {
+        width:90%;
+        margin-left: 3%;
+    }
+    
+    /* Mobile menu styling */
+    .mobile-menu {
+        display: inherit;
+    }
+
+    .desktop-menu {
+        display: none;
+    }
+
+    .Option1m {
+        /* background-image: url("img/event.jpg"); */
+        background-color: #544a75;
+        border: none;
+        color: white;
+        padding: 30px;
+        text-align: center;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        width: 70%;
+        border-radius: 100px;
+        margin-top: 2em;
+        text-decoration: none;
+    }
+    
+    .Option2m {
+        /* background-image: url("img/game.jpg"); */
+        background-color: #544a75;
+        border: none;
+        color: white;
+        padding: 30px;
+        text-align: center;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        width: 70%;
+        border-radius: 100px;
+        margin-top: 2em;
+        text-decoration: none;
+    }
+
+    /* Mobile tutorial styling */
+    .tutorial-mobile{
+        display: inherit;
+    }
+
+    .tutorial-header {
+        font-size: 3em;
+    }
+
+    .tutorial-mobile img {
+        margin-bottom: 10%;
+    }
+
     /* Index page styling */
     .img-carousel{
         background-position: center;
@@ -44,11 +117,26 @@
     .myAlert p {
         font-size: 0.7em;
     }
-    
+
+    .tutorial{
+        display: none;
+    }
+
+        
 
 }
 
 @media (max-width: 600px) {
+
+    /* Mobile tutorial styling */
+    .tutorial-mobile{
+        display: inherit;
+    }
+
+    .tutorial-header {
+        font-size: 2.25em;
+    }
+
     /* Index page styling */
     #mobileImage h3{
         height: 0px;

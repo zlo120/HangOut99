@@ -1,28 +1,25 @@
 {% extends 'template.html' %}
 
 {% block body %}
-
 <div class="container">
   <div class="row create">
     <form style="width: 80%;" class="ml-4" action="" method="POST">
       {{ form.hidden_tag() }}
-      
-      {% if type == "event" %}
-
         <div class="form-group">
           <div class="row">
                 <div class="white-text col-lg-6">
-                  
                     {{form.title.label (class="white-text")}}
                     {{form.title (class="form-control black-text mb-4 mr-3")}}
 
-                    {{form.description.label (class="white-text")}}
-                    {{form.description (class="form-control black-text myTextAreaField mb-5")}}
+                    <label class="white-text" for="description">Description *</label>
+
+                    <!-- Here? -->
+                    <textarea class="form-control black-text myTextAreaField mb-5" id="description" name="description" placeholder="Description of the event" required rows="10">{{event.Description}}</textarea>
                       
                 </div>
 
                 <div class="white-text col-lg-6">
-                  <div id="DateTime">
+                  <div id="DateTime", style="display: none;">
                     {{form.date.label (class="white-text mr-5")}}
                     {{form.date (class="form-control black-text mr-5")}}
 
@@ -31,14 +28,9 @@
                   </div>
 
                   <div class="form-check">
-                    <input type="checkbox" class="form-check-input" onClick="plan()" id="exampleCheck1">
-                    <label class="form-check-label" for="exampleCheck1">This has no date yet</label>
+                    <input type="checkbox" class="form-check-input" onClick="changeDate()" id="exampleCheck1">
+                    <label class="form-check-label" for="exampleCheck1">{% if event.DateTime %}Change the date{% else %}Add a date{% endif %}</label>
                   </div>
-
-                  {{form.location.label (class="mt-3 white-text mr-5")}}
-                  {{form.location (class="form-control black-text mr-5")}}
-
-                  
 
                   <br>
 
@@ -51,31 +43,6 @@
                 </div>
             </div>
         </div>
-
-      {% elif type == "hangoutgroup" %}
-
-        <div class="form-group mt-5">
-          <h1 class="mb-5">Create a HangOut Group</h1>
-          <div class="row">
-                <div class="white-text">
-
-                  <div class="title mr-4" style="display: inline-block;">
-                    {{form.name.label (style="font-size: 1.5em;")}}
-                    {{form.name (class="form-control black-text mb-4 mr-3", size="25" , style="font-size: 1.5em;")}}
-                  </div>
-                  
-                  <div class="pin" style="display: inline-block;">
-                    {{form.pin (class="form-control black-text mb-4 mr-1" , size="8", style="font-size: 1.5em;", placeholder="Pin (optional)")}}
-                  </div>
-                    
-                  {{form.submit (class="btn btn-primary btn-lg white-text mb-3 ml-4")}}
-                     
-                </div>
-            </div>
-        </div>
-
-      {% endif %}
-
     </form>       
   </div>
 </div>
@@ -85,7 +52,7 @@
 
 {% block script %}
 
-function plan() {
+function changeDate() {
 
   var x = document.getElementById("DateTime");
   if (x.style.display === "none") {

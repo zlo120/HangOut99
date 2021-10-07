@@ -1,16 +1,66 @@
 from datetime import datetime
 import os, string, random, smtplib, ssl, csv
 
+from .models import User
+
+from . import db
+from . import login_manager
+
+@login_manager.user_loader
+def user_loader(id):
+    return User.query.get(id)
+
+# Printing sql
+# ('ZacL', 'The bois')
+
+# Group related functions
+def getUserGroups(id):
+    return db.engine.execute(f"select u.Username as UserName, h.Name as HangoutName from 'users' as u inner join 'user_identifier' as ui on (ui.user_id = u.ID) inner join 'hangoutgroups' as h on (h.ID = ui.hangoutgroup_id) where (u.ID = '{id}');")
+
+def getHangOutID(user, group):
+    groups = getUserGroups(user.ID)
+    ans = None
+
+    for curr_group in groups:
+        if group == curr_group[1]:
+            ans = curr_group[1]
+            break
+
+    res = db.engine.execute(f"SELECT ID FROM hangoutgroups WHERE Name = '{ans}'")
+    for row in res:
+        return row[0]
+
+    return None
+
+def getGroupByEvent(event):
+    res = db.engine.execute(f"SELECT Name FROM hangoutgroups WHERE ID = {event.ID};")
+    for row in res:
+        return row[0]
+
+# Other utils
+# create a datetime object
 def createDateTimeObject(time):
+
     year = time[:4]
     month = time[5:7]
     day = time[8:10]
 
     time = time[11:]
 
-    time = f"{day}/{month}/{year[2:]} " + time
+    try:
+        if time == 'None':
+            date_time = f"{day}/{month}/{year[2:]} 00:00"
+            return datetime.strptime(date_time, '%d/%m/%y %H:%M')
 
-    return datetime.strptime(time + ":00", '%d/%m/%y %H:%M:%S')
+        date_time = f"{day}/{month}/{year[2:]} " + time
+        
+        return datetime.strptime(date_time , '%d/%m/%y %H:%M:%S')
+
+    except:
+        return None
+
+def randomString(num):
+    return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in range(num))
 
 # send email
 def send_email(TOKEN, receiver, validationForm = True):

@@ -4,24 +4,24 @@
 {% if current_user.is_authenticated %}
 
 <div id="mobileImage">
-    <img class="d-block w-100" src="{{ url_for('static', filename='img/MobileImage.jpg') }}" alt="Welcoming Image">
+    <img class="d-block w-100" src="{{ url_for('static', filename='img/bg-mobile.png') }}" alt="Welcoming Image">
     <h3 class="d-flex justify-content-center">Welcome back {{ User.Username }}!</h3>
 </div>
 
 <div id="desktopImage">
-    <img class="d-block w-100" src="{{ url_for('static', filename='img/bg1.jpg') }}" alt="Welcoming Image">
+    <img class="d-block w-100" src="{{ url_for('static', filename='img/bg-desktop.png') }}" alt="Welcoming Image">
     <h3 class="d-flex justify-content-center">Welcome back {{ User.Username }}</h3>
 </div>
 
 {% else %}
 
 <div id="mobileImage">
-    <img class="d-block w-100" src="{{ url_for('static', filename='img/MobileImage.jpg') }}" alt="Welcoming Image">
+    <img class="d-block w-100" src="{{ url_for('static', filename='img/bg-mobile.png') }}" alt="Welcoming Image">
     <h3 class="d-flex justify-content-center">Welcome to Hang Out 99!</h3>
 </div>
 
 <div id="desktopImage">
-    <img class="d-block w-100" src="{{ url_for('static', filename='img/bg1.jpg') }}" alt="Welcoming Image">
+    <img class="d-block w-100" src="{{ url_for('static', filename='img/bg-desktop.png') }}" alt="Welcoming Image">
     <h3 class="d-flex justify-content-center">Welcome to Hang Out 99!</h3>
 </div>
 
@@ -33,27 +33,383 @@
 
 {% if current_user.is_authenticated %}
 
-<div class="container">
-    <a href="{{ url_for('hangout.create_hangout') }}" class="mt-3 btn btn-primary">Create a hangout group</a>
-    <a href="{{ url_for('event.create_event') }}" class="ml-3 mt-3 btn btn-secondary">Create an event</a>
-    <h1 class="mt-5 mb-3" style="color: white;">Lets see what's on</h1>
+<div class="container mt-4">
     
+    {% if groups == [] %}
+
+    <h2 class="d-flex justify-content-center">It seems like you're not in a group yet!</h2>
+
+    <div class="row desktop-menu">        
+        <div class="col-lg-6 d-flex justify-content-center" >
+            <a class="Option2" style="border-radius:10px; text-decoration: none; color: white;" href="{{ url_for('hangout.create_hangout') }}">Create a HangOut group</a>
+        </div>
+        <div class="col-lg-6 d-flex justify-content-center">
+            <a class="Option1" style="border-radius:10px; text-decoration: none; color: white;" href="{{ url_for('hangout.join') }}">Join a HangOut group</a>
+        </div>
+    </div>
+
+    <div class="row mobile-menu"> 
+        <br>
+        <br>
+        <hr>
+        <h1 class="d-flex justify-content-center ml-3">Maybe create or join a group?</h1>       
+        <div class="d-flex justify-content-center" >
+            <a class="Option2m" style="border-radius:10px; text-decoration: none; height:50%; color: white;" href="{{ url_for('user.login') }}">Create a HangOut group</a>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a class="Option1m" style="border-radius:10px; text-decoration: none; height:50%; color: white;" href="{{ url_for('hangout.join') }}">Join a HangOut group</a>
+        </div>
+    </div>
+
+    {% elif Event == None %}
+
+    <h1 class="d-flex justify-content-center">You don't have any upcoming events...</h1>
+
+    <div class="row desktop-menu">        
+        <div class="col-lg-6 d-flex justify-content-center" >
+            <a class="Option2" style="text-decoration: none; color: white;" href="{{ url_for('event.create_event') }}">Create an event</a>
+        </div>
+        <div class="col-lg-6 d-flex justify-content-center">
+            <a class="Option1" style="text-decoration: none; color: white;" href="{{ url_for('event.explore') }}">Explore events</a>
+        </div>
+    </div>
+
+    <div class="desktop-menu">
+    <br>
+    <br>
+    <hr>
+    <h1 class="d-flex justify-content-center">Maybe create or join a group?</h1>
+    </div>
+    
+    <div class="row desktop-menu">  
+        <div class="col-lg-6 d-flex justify-content-center" >
+            <a class="Option2" style="border-radius:10px; text-decoration: none; color: white;" href="{{ url_for('hangout.create_hangout') }}">Create a HangOut group</a>
+        </div>
+        <div class="col-lg-6 d-flex justify-content-center">
+            <a class="Option1" style="border-radius:10px; text-decoration: none; color: white;" href="{{ url_for('hangout.join') }}">Join a HangOut group</a>
+        </div>
+    </div>
+
+    <div class="row mobile-menu">    
+         
+        <div class="d-flex justify-content-center" >
+            <a class="Option2m" style="text-decoration: none; height:50%; color: white;" href="{{ url_for('event.create_event') }}">Create an event</a>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a class="Option1m" style="text-decoration: none; color: white;" href="{{ url_for('event.explore') }}">Explore events</a>
+        </div>
+    </div>
+
+    <div class="row mobile-menu"> 
+        <br>
+        <br>
+        <hr>
+        <h1 class="d-flex justify-content-center ml-3">Maybe create or join a group?</h1>          
+        <div class="d-flex justify-content-center" >
+            <a class="Option2m" style="border-radius:10px; text-decoration: none; height:50%;color: white;" href="{{ url_for('hangout.create_hangout') }}">Create a HangOut group</a>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a class="Option1m" style="border-radius:10px; text-decoration: none; height:50%; color: white;" href="{{ url_for('hangout.join') }}">Join a HangOut group</a>
+        </div>
+    </div>
+
+    {% else %}
+
+    <!-- Put events here -->
+    <h1 class="mt-2 ">Your next upcoming event</h1>
+    <div class="event">
+        <h1>{{Event.Name}}</h1>
+        <h4>{{Event.hangoutgroup.Name}} </h4>
+        <p>{{Event.Description}}</p>
+
+        <hr>
+
+        {% if Event.Location %}
+        <p><strong>Location</strong> : {{Event.Location}}</p>
+        <a href="{{Event.Link}}" target="_blank" style="color:white;">Google maps link</a>
+
+        <br><br>
+
+        {% else %}
+        <p>There isn't a location set for this event yet</p>
+        {% endif %}
+
+        <strong>
+            {% if Event.DateTime %}
+            {{Event.DateTime.strftime('%d / %m / %Y')}}<br>
+            {{Event.DateTime.strftime('%I:%m %p')}}
+            {% else %}
+            This is still a plan. Hasn't got a date yet.
+            {% endif %}
+        </strong>
+        
+        <br>
+        <a class="mt-3 btn btn-secondary" href="{{url_for('event.event', id = Event.ID)}}">See details about this event</a>
+    </div>
+
+    <div class="row desktop-menu">        
+        <div class="col-lg-6 d-flex justify-content-center" >
+            <a class="Option2" style="text-decoration: none; color: white;" href="{{ url_for('event.create_event') }}">Create an event</a>
+        </div>
+        <div class="col-lg-6 d-flex justify-content-center">
+            <a class="Option1" style="text-decoration: none; color: white;" href="{{ url_for('event.explore') }}">Explore events</a>
+        </div>
+    </div>
+    <div class="desktop-menu">
+    <br>
+    <br>
+    <hr>
+    <h1 class="d-flex justify-content-center">Maybe create or join a group?</h1>
+</div>
+
+    <div class="row desktop-menu">        
+        <div class="col-lg-6 d-flex justify-content-center" >
+            <a class="Option2" style="border-radius:10px; text-decoration: none; color: white;" href="{{ url_for('hangout.create_hangout') }}">Create a HangOut group</a>
+        </div>
+        <div class="col-lg-6 d-flex justify-content-center">
+            <a class="Option1" style="border-radius:10px; text-decoration: none; color: white;" href="{{ url_for('hangout.join') }}">Join a HangOut group</a>
+        </div>
+    </div>
+
+    <div class="row mobile-menu">        
+        <div class="d-flex justify-content-center" >
+            <a class="Option2m" style="text-decoration: none; height:50%; color: white;" href="{{ url_for('event.create_event') }}">Create an event</a>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a class="Option1m" style="text-decoration: none; color: white;" href="{{ url_for('event.explore') }}">Explore events</a>
+        </div>
+    </div>
+
+    <div class="row mobile-menu">        
+
+        <br>
+        <br>
+        <hr>
+        <h1 class="d-flex justify-content-center ml-3">Maybe create or join a group?</h1>
+
+        <div class="d-flex justify-content-center" >
+            <a class="Option2m" style="border-radius:10px; text-decoration: none; height:50%; color: white;" href="{{ url_for('hangout.create_hangout') }}">Create a HangOut group</a>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a class="Option1m" style="border-radius:10px; text-decoration: none; height:50%; color: white;" href="{{ url_for('hangout.join') }}">Join a HangOut group</a>
+        </div>
+    </div>
+
+    {% endif %}
 
 {% else %}
 
 <div class="container">
-    <div class="row">
-        <div class="col-lg-6 d-flex justify-content-center">
-            <a class="Option1" style="text-decoration: none; color:#fff;" href="{{ url_for('user.register') }}">Register an account</a>
-        </div>
+
+    <div class="row desktop-menu">        
         <div class="col-lg-6 d-flex justify-content-center" >
-            <a class="Option2" style="text-decoration: none; color:#fff;" href="{{ url_for('user.login') }}">Login to your account</a>
+            <a class="Option2" style="text-decoration: none; color: white;" href="{{ url_for('user.login') }}">Login to your account</a>
+        </div>
+        <div class="col-lg-6 d-flex justify-content-center">
+            <a class="Option1" style="text-decoration: none; color: white;" href="{{ url_for('user.register') }}">Register an account</a>
+        </div>
+    </div>
+
+    <div class="row mobile-menu">        
+        <div class="d-flex justify-content-center" >
+            <a class="Option2m" style="text-decoration: none; height:50%; color: white;" href="{{ url_for('user.login') }}">Login to your account</a>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a class="Option1m" style="text-decoration: none; height:50%; color: white;" href="{{ url_for('user.register') }}">Register an account</a>
         </div>
     </div>
 
 {% endif %}
 
+</div>
+
+<!-- Tutorial on how to use the website -->
+<br><br>
+<h1 class="d-flex justify-content-center tutorial-header" style="padding-left: 1%; text-align: center; color:white;">What you can do here</h1>
+<div class="tutorial tutorial-dark">
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <img style="max-width: 100%; padding-left:20%; border-radius: 100px;" src="{{ url_for('static', filename='img/tut1.jpg') }}" alt="Tutorial image 1">
+            </div>
+            <div class="col-lg-6">
+                <h1>Create a HangOut group!</h1>
+                <p>Create a group for all of your friends, where you can keep track of events and other plans!</p>
+                <p>Just like any social media platform, you can easily create a group and add any of your friends to that group!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tutorial tutorial-light">
+    <!-- To connect with your friends -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1 style="text-align: right;">Connect with your friends</h1>
+                <p style="text-align: right; padding-left: 40%; padding-right: 5%;">Get all your friends into one group to easily organise events!</p>
+
+                <p style="text-align: right; padding-left: 40%; padding-right: 5%;">Anyone in your group can see all the events that are upcoming, making it easier to schedule and make remainders for future group activities.</p>
+            </div>
+            <div class="col-lg-6">
+                <img style="max-width: 100%; padding-right: 20%;border-radius: 100px;" src="{{ url_for('static', filename='img/tut2.jpg') }}" alt="Tutorial image 2">                
+            </div>
+        </div>
+    </div>        
+</div>
+
+<div class="tutorial tutorial-dark">
+    <!-- Create an event -->
+    <div class="container-fluid mt-5 mb-3">
+        <div class="row">
+            <div class="col-lg-6">
+                <img style="max-width: 100%; height: 100%; padding-left:20%; padding-bottom: 0%; border-radius: 100px;" src="{{ url_for('static', filename='img/tut3.jpg') }}" alt="Tutorial image 1">
+            </div>
+            <div class="col-lg-6">
+                <h1>Create events for your group!</h1>
+                <p>Creating events is as easy as giving a title, description, location, date and time!</p>
+
+                <p>Making events is an easier way to keep track of events happening in your friendship groups!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tutorial tutorial-light"">
+    <!-- To do fun stuff -->    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1 style="text-align: right;">Organise more activities with your friends</h1>
+                <p style="text-align: right; padding-left: 40%; padding-right: 5%;">Life is more fun when you share it with your friends. Need an excuse to just hang out? Create an event to get all your friends together.</p>
+                <p style="text-align: right; padding-left: 50%; padding-right: 5%;">These activities don't even have to be in person, they can be anywhere.</p>
+            </div>
+            <div class="col-lg-6">
+                <img style="max-width: 100%; padding-right: 20%;border-radius: 100px;" src="{{ url_for('static', filename='img/tut4.jpg') }}" alt="Tutorial image 2">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tutorial tutorial-dark" >
+    <!-- Create a plan -->
     
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <img style="max-width: 100%; height: 100%; padding-left:20%; padding-bottom: 0%; border-radius: 100px;" src="{{ url_for('static', filename='img/tut5.jpg') }}" alt="Tutorial image 1">
+            </div>
+            <div class="col-lg-6">
+                <h1>Create a plan</h1>
+                <p>Sometimes we just don't know where or when we want to do something. We just know we want to do it.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tutorial tutorial-light">
+    <!-- When you don't know what or when -->
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6">
+                <h1 style="text-align: right;">When you don't know a what or a when</h1>
+                <p style="text-align: right; padding-left: 40%; padding-right: 5%;">Creating a plan is as easy as giving it a title and description and poof its there.</p>
+            </div>
+            <div class="col-lg-6">
+                <img style="max-width: 100%; padding-right: 20%;border-radius: 100px;" src="{{ url_for('static', filename='img/tut6.jpg') }}" alt="Tutorial image 2">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tutorial-mobile tutorial-dark">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <img style="max-width: 100%; border-radius: 100px;" src="{{ url_for('static', filename='img/tut1.jpg') }}" alt="Tutorial image 1">
+            </div>
+            <div class="col-12">
+                <h1>Create a HangOut group!</h1>
+                <p>Create a group for all of your friends, where you can keep track of events and other plans!</p>
+                <p>Just like any social media platform, you can easily create a group and add any of your friends to that group!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tutorial-mobile tutorial-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <img style="max-width: 100%; border-radius: 100px;" src="{{ url_for('static', filename='img/tut2.jpg') }}" alt="Tutorial image 1">
+            </div>
+            <div class="col-12">
+                <h1>Connect with your friends</h1>
+                <p>Get all your friends into one group to easily organise events!</p>
+                <p>Anyone in your group can see all the events that are upcoming, making it easier to schedule and make remainders for future group activities.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tutorial-mobile tutorial-dark">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <img style="max-width: 100%; border-radius: 100px;" src="{{ url_for('static', filename='img/tut3.jpg') }}" alt="Tutorial image 1">
+            </div>
+            <div class="col-12">
+                <h1>Create events for your group!</h1>
+                <p>Creating events is as easy as giving a title, description, location, date and time!</p>
+                <p>Making events is an easier way to keep track of events happening in your friendship groups!</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tutorial-mobile tutorial-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <img style="max-width: 100%; border-radius: 100px;" src="{{ url_for('static', filename='img/tut4.jpg') }}" alt="Tutorial image 1">
+            </div>
+            <div class="col-12">
+                <h1>Organise more activities with your friends</h1>
+                <p>Life is more fun when you share it with your friends. Need an excuse to just hang out? Create an event to get all your friends together.</p>
+                <p>These activities don't even have to be in person, they can be anywhere.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tutorial-mobile tutorial-dark">
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <img style="max-width: 100%; border-radius: 100px;" src="{{ url_for('static', filename='img/tut5.jpg') }}" alt="Tutorial image 1">
+            </div>
+            <div class="col-12">
+                <h1>Create a plan</h1>
+                <p>Sometimes we just don't know where or when we want to do something. We just know we want to do it.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="tutorial-mobile tutorial-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 mt-5">
+                <img style="max-width: 100%; border-radius: 100px;" src="{{ url_for('static', filename='img/tut6.jpg') }}" alt="Tutorial image 1">
+            </div>
+            <div class="col-12">
+                <h1>When you don't know a what or a when</h1>
+                <p>Creating a plan is as easy as giving it a title and description and poof its there.</p>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

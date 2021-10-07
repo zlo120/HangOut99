@@ -1,31 +1,187 @@
 {% extends "template.html" %}
 
-{% block header %}
-<div id="mobileImage">
-    <img class="d-block w-100" src="{{ url_for('static', filename='img/MobileImage.jpg') }}" alt="Welcoming Image">
-    <h3 class="d-flex justify-content-center">Welcome to GamerIO!</h3>
-</div>
+{% block body %}
+<div class="container">
 
-<div id="desktopImage">
-    <img class="d-block w-100" src="{{ url_for('static', filename='img/bg1.jpg') }}" alt="Welcoming Image">
-    <h3 class="d-flex justify-content-center">Welcome to GamerIO!</h3>
+    {% if msg %}
+    <h1 class="mt-5">{{msg}}</h1>
+
+    {% else %}
+    <h1 class="mt-5">Your account details</h1>
+    <br>
+    <p>Email: {{user.Email}}</p>
+    <p>Username: {{user.Username}}</p>
+    {% endif %}
+
+    <br><br>
+
+    {% if user.hangoutgroup and hasCreatedGroup %}
+        <!-- Hangouts -->
+        <h1>Your hangout groups</h1>
+        {% for group in user.hangoutgroup %}
+        
+            {% if group.Creator_ID == current_user.get_id() %}
+            <div id="groupID{{group.ID}}" class="group-obj">
+                <h4>{{group.Name}}</h4>
+           
+                <a class="btn btn-secondary" href="{{ url_for('hangout.edit', id=group.ID) }}">Edit details</a>
+                <hr>
+                <p>Group members:</p>
+                <ul>
+                {% for member in group.Users %}
+                    <li>{{member.Username}}</li>
+                {% endfor %}
+                </ul>
+    
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#{{group.ID}}DeleteModal">
+                    Delete HangOut Group
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="{{group.ID}}DeleteModal" tabindex="-1" role="dialog" aria-labelledby="{{group.ID}}DeleteModal" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" style="color:black;" id="exampleModalLabel">Confirming delete</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body" style="color:black;">
+                        Are you sure you want to delete this HangOut group? <br> Once you delete it, it's gone forever. <br><br> Note: you'll have to refresh the page to show that this has been deleted
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onClick="deleteGroup{{group.ID}}()" >Delete</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+        {% endfor %}
+
+        <!-- Events -->
+        <h1 class="mt-5 mb-3">Your events and plans</h1>
+
+        {% if user.event and hasCreatedEvent %}
+
+            {% for event in user.event %}
+
+            {% if event.Creator_ID == current_user.get_id() %}
+            <div class="group-obj">
+                <h4>{{event.Name}}</h4>
+                <a href="{{url_for('event.event', id = event.ID)}}" class="btn btn-primary">Go to details page</a> <a class="btn btn-secondary" href="{{url_for('event.edit', id = event.ID)}}">Edit details</a>
+                <p>{{event.Description}}</p>
+                <strong>
+                    {% if event.DateTime %}
+                    {{event.DateTime.strftime('%d / %m / %y')}}<br>
+                    {{event.DateTime.strftime('%I:%M %p')}}
+                    {% else %}
+                    This is still a plan. Hasn't got a date yet.
+                    {% endif %}
+                </strong>
+                <br><br>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#{{event.ID}}DeleteEvent">
+                    Delete Event
+                </button>
+                
+                <!-- Modal -->
+                <div class="modal fade" id="{{event.ID}}DeleteEvent" tabindex="-1" role="dialog" aria-labelledby="{{event.ID}}DeleteEvent" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" style="color:black;" id="exampleModalLabel">Confirming delete</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body" style="color:black;">
+                        Are you sure you want to delete this event? <br> Once you delete it, it's gone forever. <br><br>Note: you'll have to refresh the page to show that this has been deleted
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" onClick="deleteEvent{{event.ID}}()" >Delete</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {% endfor %}
+
+        {% else %}
+        
+            <h2>You haven't created any events or plans yet</h2>
+
+            <br><br><br>
+
+        {% endif %}
+        
+        
+
+    {% else %}
+
+    <h2>It seems like you haven't created any HangOut groups yet!</h2>
+
+    {% endif %}
+
+    
 </div>
 {% endblock %}
 
-{% block body %}
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6 d-flex justify-content-center">
-            <a class="Option1" style="text-decoration: none; color:#fff;" href="#">Register an account</a>
-        </div>
-        <div class="col-lg-6 d-flex justify-content-center" >
-            <a class="Option2" style="text-decoration: none; color:#fff;" href="#">Login to your account</a>
-        </div>
+{% block footer %}display:none;{% endblock %}
 
-        <div class="col-md-12">
-            <h1 class="mt-5 mb-5 d-flex justify-content-center" style=" color:#fff;"> Start exploring events! </h1>
-        </div>
+{% block script %}
 
-    </div>
-</div>
+{% for group in user.hangoutgroup %}
+
+
+function deleteGroup{{group.ID}}() {
+    (async () => {
+    const rawResponse = await fetch('{{url_for('hangout.delete')}}' , {
+        method: 'POST',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify( { {{user.ID}} : {{ group.ID }} } )
+    });
+
+    const content = await rawResponse.json();
+
+    console.log(content);
+
+    })();
+
+}
+{% endfor %}
+
+{% for event in user.event %}
+
+function deleteEvent{{event.ID}}() {
+    (async () => {
+    const rawResponse = await fetch('{{url_for('event.delete')}}' , {
+        method: 'POST',
+        headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify( { {{user.ID}} : {{ event.ID }} } )
+    });
+
+    const content = await rawResponse.json();
+
+    console.log(content);
+
+    })();
+
+}
+
+{% endfor %}
+
 {% endblock %}

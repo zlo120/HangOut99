@@ -1,0 +1,128 @@
+{% extends "template.html"%}
+
+{% block body %}
+
+{% if exists and not Eligible %}
+
+    <div class="container">
+        <h1 class="mt-5" style="color: white;">You aren't in event's HangOut group!</h1>
+        <p style="margin-top:2%; font-size:1.25em;">You have to be in the correct group to view this event's details...</p>
+    </div>
+
+{% elif exists %}
+
+<div class="container">
+    <div class="row">
+
+        <div class="col-lg-8">
+            <h1 class="mt-5" style="color: white;">{{event.Name}} {% if not event.DateTime %}(PLAN){% endif %} </h1>
+
+            <p style="margin-top:2%; font-size:1.25em;">{{event.Description}}</p>
+
+            <strong>
+                {% if event.DateTime %}
+                {{event.DateTime.strftime('%d / %m / %Y')}}<br>
+                {{event.DateTime.strftime('%I:%m %p')}}
+                {% else %}
+                This is still a plan. Hasn't got a date yet.
+                {% endif %}            
+            </strong>    
+
+            {% if event.Location %}
+            <p>Location : {{event.Location}}</p>
+            <a href="{{event.Link}}" target=”_blank” style="color:white;">Google maps link</a>
+            {% endif %}
+            
+            <br>
+
+            <!-- {% if event.Comments | length > 10 %}
+            <a style="color:white;" href="#comments">Go to the comments</a>
+            {% endif %} -->
+
+            <form style="width: 100%;" action="" method="POST" enctype="multipart/form-data">
+                {{ image_form.hidden_tag() }}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="white-text col-12">                            
+                            {{image_form.image (class="form-control", style="display: inline-block; width:80%;")}}        
+                            {{image_form.submit (class="btn btn-primary ", style="margin-bottom:1%; margin-left:1%; width: 15%; display: inline-block;")}}
+                                
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="col-lg-4">
+            <h4 class="mt-5">People interested in this event:</h4>
+
+            {% for user in event.Users %}
+                {% if user.ID == event.Creator_ID %}
+                    <div class="interested-user"><p style="font-size:1.5em">{{user.Username}} &#128081;</p></div>
+                {% else %}
+                    <div class="interested-user"><p style="font-size:1.5em">{{user.Username}}</p></div>
+                {%endif%}
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div id="comments" class="chat mt-5">
+                <h1> Comments</h1>
+
+                <!-- Comments -->
+
+                {% if event.Comments | length == 0 %}
+                <h6 class="mt-3 mb-3">No comments yet...</h6>
+                {% endif %}
+
+                {% for comment in event.Comments %}
+                <div class="comment">
+                    <h6>{{comment.Creator_ID}}</h6>
+                    <p>{{comment.Content}}</p>
+                </div>
+                {% endfor %}
+                
+                <form style="width: 100%;" action="" method="POST">
+                    {{ form.hidden_tag() }}
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="white-text col-12">
+                                
+                                {{form.comment (class="form-control", style="display: inline-block; width:80%;")}}             
+                                
+                                {{form.submit (class="btn btn-primary ", style="margin-bottom:1%; margin-left:1%; width: 15%; display: inline-block;")}}
+                                    
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>        
+    </div>
+    
+</div>
+
+{% else %}
+
+<div class="container">
+    <h1 class="mt-5" style="color:white;">This event doesn't exist!</h1>
+    <p style="margin-top:2%; font-size:1.25em;" >You either was given a bad link, or this event has been deleted because it has passed.</p>
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+{% block footer %}display: none;{% endblock %}
+
+{% block script %}
+
+sleep(5000).then(() => {
+    console.log("5 seconds");
+});
+
+{% endblock %}

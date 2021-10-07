@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+import json
 
 app = None
 db = SQLAlchemy()
@@ -29,17 +30,24 @@ def create_app():
     global login_manager
 
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
+    app.config['SECRET_KEY'] = 'AIzaSyDdkNpKFJt2n8M0gzbWp4q2LbJr1f73rso'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+
+    UPLOAD_FOLDER = '/static/image'
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
     db.init_app(app)
     bcrypt = Bcrypt(app)
     login_manager.init_app(app)
 
-    from . import user, event, routes, hangout
+    from . import user, event, routes, hangout, error_handlers
 
     app.register_blueprint(user.userbp)
     app.register_blueprint(event.eventbp)
     app.register_blueprint(routes.mainbp)
     app.register_blueprint(hangout.hangoutbp)
+
+    app.register_error_handler(404, error_handlers.page_not_found)
+    app.register_error_handler(401, error_handlers.not_authenticated)
 
     return app
