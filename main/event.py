@@ -166,6 +166,8 @@ def create():
     
     if event_form.validate_on_submit():
 
+        print("\n\nValidated\n\n")
+
         # Creating a datetime object from the date + time forms
         datetime = createDateTimeObject( str(event_form.date.data) + ' ' + str(event_form.time.data) )
 
