@@ -57,11 +57,15 @@ def delete():
             if key != 'GroupID':
                 user_id = key
 
-        group = HangOutGroup.query.filter_by(Name = req['GroupID']).first() 
+        # group = HangOutGroup.query.filter_by(Name = req['GroupID']).first() 
 
-        db.session.delete(group)
-        db.session.commit()
-            
+        # db.session.delete(group)
+        # db.session.commit()
+        
+        group_name = req['GroupID']
+
+        db.engine.execute(f'DELETE FROM hangoutgroups WHERE hangoutgroups.Name = \'{ group_name }\';')
+
     return Response("Got it", status=201, mimetype='application/json')
 
 @hangoutbp.route("/view/<int:id>")
