@@ -61,10 +61,10 @@ def delete():
 
         # db.session.delete(group)
         # db.session.commit()
-
+        
         group_name = req['GroupID']
 
-        db.engine.execute(f'DELETE FROM hangoutgroups WHERE "hangoutgroups.Name" = \'{ group_name }\';')
+        db.engine.execute(f'DELETE FROM hangoutgroups WHERE hangoutgroups.Name = \'{ group_name }\';')
 
     return Response("Got it", status=201, mimetype='application/json')
 
