@@ -49,7 +49,6 @@ def create():
 
 @hangoutbp.route("/delete", methods = ['POST'])
 def delete():
-
     if request.method == 'POST':
         res = request.get_json()
         this_user = None
