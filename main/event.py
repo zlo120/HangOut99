@@ -185,7 +185,7 @@ def create():
             Name = event_form.title.data,
             Description = event_form.description.data,
             DateTime = datetime,
-            Hangout_ID = group,
+            Hangout_ID = group.ID,
             Location = location,
             Link = link
         )
