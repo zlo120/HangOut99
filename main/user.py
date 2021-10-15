@@ -111,11 +111,11 @@ def account():
         
         if user_id == current_user.ID and req[str(user_id)] == current_user.Username:
             if deleteType == 'GroupID':
-                group = HangOutGroup.query.filter_by( ID = int(req[deleteType]) ).first()
+                group = HangOutGroup.query.filter_by( Name = int(req[deleteType]) ).first()
                 db.session.delete(group)
 
             elif deleteType == 'EventID':
-                event = Event.query.filter_by( ID = int(req[deleteType]) ).first()
+                event = Event.query.filter_by( Name = int(req[deleteType]) ).first()
                 db.session.delete(event)
 
             db.session.commit()
