@@ -218,8 +218,10 @@ def delete():
 
         event = Event.query.filter_by(Name = req['EventID']).first() 
 
-        db.session.delete(event)
-        db.session.commit()
+        print(f"\n\n{event}\n\n")
+
+        # db.session.delete(event)
+        # db.session.commit()
             
     return Response("Got it", status=201, mimetype='application/json')
 

@@ -61,8 +61,10 @@ def delete():
 
         group = HangOutGroup.query.filter_by(Name = req['GroupID']).first() 
 
-        db.session.delete(group)
-        db.session.commit()
+        print(f"\n\n{group}\n\n")
+
+        # db.session.delete(group)
+        # db.session.commit()
 
     return Response("Got it", status=201, mimetype='application/json')
 
