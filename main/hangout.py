@@ -19,7 +19,7 @@ def load_user(user_id):
 hangoutbp = Blueprint("hangout", __name__, url_prefix="/hangout")
 
 @hangoutbp.route("/create", methods = ['GET', 'POST'])
-def create_hangout():
+def create():
     form = CreateGroup()
     try:
         if form.validate_on_submit():
@@ -29,7 +29,7 @@ def create_hangout():
                 Creator_ID = current_user.get_id(),
                 JoinLink = form.name.data + randomString(10),
                 Pin = form.pin.data
-            )      
+            )
 
             this_user = load_user(current_user.get_id())
 
@@ -39,13 +39,13 @@ def create_hangout():
             db.session.commit()
             
             flash(f"You have created a group called {form.name.data}!")
-            return redirect(url_for('hangout.view', id=group.ID))
+            return redirect(url_for('main.index', id=group.ID))
     
     except exc.IntegrityError:
         flash(f"That group name already exists")
         return redirect(url_for('hangout.create_hangout'))
 
-    return render_template("create.html", form=form, type="hangoutgroup")
+    return render_template("group/create.html", form=form, type="hangoutgroup")
 
 @hangoutbp.route("/delete", methods = ['POST'])
 def delete():
@@ -73,58 +73,59 @@ def delete():
 @hangoutbp.route("/view/<int:id>")
 def view(id):
 
-    base_url = request.base_url
-    temp = base_url.index("hangout")
-    base_url = "https://hangout99.herokuapp.com/"
+    # Check if user is in the group first
+    group = HangOutGroup.query.filter_by(ID = id).first()
+    if group is None or group not in current_user.hangoutgroup:
+        return redirect(url_for('event.explore'))
 
-    return render_template("hangout.html", type="view", group = HangOutGroup.query.filter_by(ID = id).first(), base_url = base_url)
+    return render_template("group/view.html", group = group)
 
 @hangoutbp.route("/join", methods = ['POST', 'GET'])
 def join():
 
     form = JoinGroup()
 
-    if form.validate_on_submit():
-        
+    if form.validate_on_submit():        
         group = HangOutGroup.query.filter_by(Name = form.name.data).first()
-        if group:            
+
+        if group :
             
-            for this_group in current_user.hangoutgroup:
-                if this_group == group:
-                    flash(f"You are already in the {group.Name} HangOut group!")
-                    return redirect(url_for('hangout.join'))
-
-            if group.Pin == form.pin.data:
-                db.engine.execute(f"INSERT INTO user_identifier (hangoutgroup_id, user_id) VALUES ({group.ID}, {current_user.get_id()})")
-                flash(f"You have joined the {group.Name} HangOut group!")
-                return redirect(url_for('hangout.view', id = group.ID))
-
+            if group in current_user.hangoutgroup:
+                
+                return redirect(url_for('main.index'))
             else:
-                flash("Your group name or pin is incorrect")
-                return redirect(url_for('hangout.join'))
+                
+                # Check pin
+                if form.pin.data == group.Pin:
+                    group.Users.append(current_user)
+                    db.session.add(group)
+                    db.session.commit()
+                    return redirect(url_for('main.index'))
+                    
+                else:
+                    return redirect(url_for('hangout.join'))      
 
         else:
-            flash("Your group name or pin is incorrect")
+            # Doesn't exist
             return redirect(url_for('hangout.join'))
 
-    return render_template("hangout.html", type="join", form = form)
+    return render_template("group/join.html", form = form)
 
 @hangoutbp.route("/link/<string:id>")
 @login_required
 def link(id):
     group = HangOutGroup.query.filter_by(JoinLink = id).first()
 
-    if group == None:
-        flash("That link doesn't work...")
-        return redirect(url_for('main.index'))
+    if group is None:
+        print("This group doesn't exist")
+        return redirect(url_for('event.explore'))
 
-    for this_group in current_user.hangoutgroup:
-        if this_group == group:
-            flash(f"You are already in the {group.Name} HangOut group!")
-            return redirect(url_for('hangout.view', id = group.ID))
+    if group in current_user.hangoutgroup:
+        print("You're already in this group!")
+    else:
+        print("You're not in this group yet...")
+        return redirect(url_for('hangout.view', id = group.ID))
 
-    db.engine.execute(f"INSERT INTO user_identifier (hangoutgroup_id, user_id) VALUES ({group.ID}, {current_user.get_id()})")
-    flash(f"You have joined the {group.Name} HangOut group!")
     return redirect(url_for('hangout.view', id = group.ID))
     
 @hangoutbp.route("/explore")
@@ -154,4 +155,4 @@ def edit(id):
             flash("A group with that name already exists!")
             return redirect(url_for('hangout.edit', id = id))
 
-    return render_template("hangout.html", type="edit", form = form, group = group)
+    return render_template("group/edit.html", form = form, group = group)

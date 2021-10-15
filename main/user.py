@@ -4,8 +4,8 @@ from flask_wtf import FlaskForm
 
 from . import bcrypt, db
 from .utils import createDateTimeObject, send_email
-from .models import User
-from .form import Register, Login
+from .models import User, Event, HangOutGroup
+from .form import Register, Login, DeleteGroup, DeleteEvent, editUser
 
 import csv, random
 
@@ -30,7 +30,7 @@ def register():
         # Make some checks
         if form_pwd != form_cpwd:
             flash("Your confirmation password didn't match")
-            return redirect(url_for('register'))
+            return redirect(url_for('user.register'))
 
         u_exists = User.query.filter_by(Username=form_username).first() is not None
         e_exists = User.query.filter_by(Email=form_email).first() is not None
@@ -44,6 +44,7 @@ def register():
             return redirect(url_for('user.register'))
 
         user = User(
+            ProfilePic = form.profile.data,
             Email = form_email,
             Username = form_username,
             Password = bcrypt.generate_password_hash(form_pwd).decode('utf-8'),
@@ -59,10 +60,8 @@ def register():
 
     return render_template("user/register.html", form = form)
 
-@userbp.route('/login', methods=['GET', 'POST'])
+@userbp.route('/login', methods=['GET','POST'])
 def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.index'))
 
     form = Login()
 
@@ -83,9 +82,9 @@ def login():
             return redirect(url_for('main.index'))
         else:
             flash("Incorrect password")
-            return redirect(url_for('login'))
-
-    return render_template("user/login.html", form = form)
+            return redirect(url_for('user.login'))
+    
+    return render_template('user/login.html', form = form)
 
 @userbp.route('/user/logout')
 @login_required
@@ -94,32 +93,57 @@ def logout():
     flash("You are now logged out")
     return redirect(url_for('main.index'))
 
-@userbp.route('/account/<int:id>')
+@userbp.route('/account', methods=['GET', 'POST'])
 @login_required
-def account(id):
+def account():    
 
-    this_user = None
+    user_id = None
+    deleteType = None
 
-    try:
-        this_user = User.query.filter_by(ID = id).first()
+    if request.method == 'POST':
+        req = request.get_json()        
+        
+        for key in req:
+            if key != 'GroupID' and key != 'EventID':
+                user_id = int(key)
+            else:
+                deleteType = key
+        
+        if user_id == current_user.ID and req[str(user_id)] == current_user.Username:
+            if deleteType == 'GroupID':
+                group = HangOutGroup.query.filter_by( ID = int(req[deleteType]) ).first()
+                db.session.delete(group)
 
-    except:
-        return render_template("user/account.html", msg = "This user does not exist...")
+            elif deleteType == 'EventID':
+                event = Event.query.filter_by( ID = int(req[deleteType]) ).first()
+                db.session.delete(event)
 
-    if current_user.get_id() != int(id):
-        return render_template("user/account.html", msg = "You don't have authorization to access this account's details...")
-    
-    hasCreatedGroup = False
-    hasCreatedEvent = False
+            db.session.commit()
 
-    for group in this_user.hangoutgroup:
-        if this_user.ID == group.Creator_ID:
-            hasCreatedGroup = True
-            break
+        else:
+            print("You are not authenticated")
 
-    for event in this_user.event:
-        if this_user.ID == event.Creator_ID:
-            hasCreatedEvent = True
-            break
-    
-    return render_template("user/account.html", msg = None, user = this_user, hasCreatedGroup = hasCreatedGroup, hasCreatedEvent = hasCreatedEvent)
+    profilePic = url_for('static', filename = f"Profiles/{current_user.ProfilePic}.png")
+
+    return render_template("user/account.html", profilePic = profilePic)
+
+@userbp.route('/edit', methods=['GET', 'POST'])
+@login_required
+def edit():
+    form = editUser(current_user)
+    profilePic = url_for('static', filename = f"Profiles/{current_user.ProfilePic}.png")
+
+    if form.validate_on_submit():
+        
+        user = User.query.filter_by(ID = current_user.ID).first()
+
+        user.ProfilePic = form.profile.data
+        
+        if form.password.data is None:
+            user.Password = form.password.data
+
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('user.account'))
+
+    return render_template('user/edit.html', form = form, profilePic = profilePic)

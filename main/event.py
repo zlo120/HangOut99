@@ -2,6 +2,8 @@ from flask import request, render_template, redirect, Blueprint, flash, Response
 from flask.helpers import url_for
 from flask_login import login_required, current_user
 from datetime import datetime
+from flask_login.utils import confirm_login
+from sqlalchemy.engine import url
 from werkzeug.utils import secure_filename
 import os
 from .routes import load_user
@@ -128,78 +130,63 @@ def unavailable():
     return Response("Got it", status=201, mimetype='application/json')
 
 @eventbp.route('/explore')
+@login_required
 def explore():
 
-    if current_user.is_authenticated:
-        this_user = User.query.filter_by(Email = current_user.Email).first()
+    event_dates = []
+    for event in current_user.event:
+        if event.DateTime is None:
+            continue
+        
+        event_dates.append( event.DateTime )  
 
-        temp = this_user.hangoutgroup
-        groups = []
-        events = []
+    latest_event = None
 
-        for row in temp:
-            hangout = HangOutGroup.query.filter_by(Name = row.Name).first()
-            groups.append(hangout)
+    print(event_dates)
 
-        for group in groups:
-            events.append(group.Events)
+    try:
+        latest_date = min(event_dates)
+        latest_event = Event.query.filter_by(DateTime = latest_date).first()
 
-        available_event_ids = []
-        unavailable_event_ids = []
-
-        for event in this_user.event:
-            available_event_ids.append(event.ID)
-
-        for event in this_user.unavailableEvent:
-            unavailable_event_ids.append(event.ID)  
-
-        return render_template('explore.html', events = events, user = this_user, available_event_ids = available_event_ids, unavailable_event_ids = unavailable_event_ids)
-
-    return render_template('explore.html')
+    except:
+        pass
+ 
+    
+    return render_template('feed.html', latest_event = latest_event)
 
 # Create event
 @eventbp.route('/create', methods = ['GET', 'POST'])
 @login_required
-def create_event():
-
-    # Get the groups the user is in
-    temp = current_user.hangoutgroup
-    groups = []
-
-    for row in temp:
-        group = HangOutGroup.query.filter_by(Name = row.Name).first()
-        groups.append(group)
-
-    if groups == []:
+def create():
+    if current_user.hangoutgroup == []:
         flash("You need to be in a group before making an event!")
         return redirect(url_for('main.index'))
 
-    user = User.query.filter_by( Email= current_user.Email ).first()
-    form = createEventForm(user)
+    event_form = createEventForm(current_user)
     
-    if form.validate_on_submit():
+    if event_form.validate_on_submit():
 
         # Creating a datetime object from the date + time forms
-        datetime = createDateTimeObject( str(form.date.data) + ' ' + str(form.time.data) )
+        datetime = createDateTimeObject( str(event_form.date.data) + ' ' + str(event_form.time.data) )
 
-        if form.location.data:
-            location = form.location.data
-            link = f"https://maps.google.com/?q={form.location.data}"
+        if event_form.location.data:
+            location = event_form.location.data
+            link = f"https://maps.google.com/?q={event_form.location.data}"
         else:
             location = None
             link = None
 
         event = Event(
-            Creator_ID = user.ID,
-            Name = form.title.data,
-            Description = form.description.data,
+            Creator_ID = current_user.ID,
+            Name = event_form.title.data,
+            Description = event_form.description.data,
             DateTime = datetime,
-            Hangout_ID = form.group.data,
+            Hangout_ID = event_form.group.data,
             Location = location,
             Link = link
         )
 
-        event.Users.append(user)
+        event.Users.append(current_user)
 
         db.session.add(event)
         db.session.commit()
@@ -207,84 +194,13 @@ def create_event():
         flash("You have created your event!")
         return redirect(url_for('main.index'))
 
-    return render_template('create.html', form = form, type="event")
+    return render_template('event/create.html', form = event_form)
 
 @eventbp.route('/view/<id>', methods=['GET', 'POST'])
 @login_required
-def event(id):
+def event(id):    
 
-    exists = False
-    # Check if event exists
-    res = db.engine.execute(f"SELECT ID FROM events WHERE ID = {id}")
-    results = []
-    for row in res:
-        results.append(res)
-
-    if results == []:
-        return render_template("event.html", exists = exists)
-
-    exists = True
-
-    # Check to make sure the user is in the correct group for this event
-    this_user = load_user(current_user.get_id())
-
-    isEligible = False
-
-    # Get the groups the user is in
-    temp = this_user.hangoutgroup
-    groups = []
-
-    for row in temp:
-        group = HangOutGroup.query.filter_by(Name = row.Name).first()
-        groups.append(group)
-        
-    # Get the group this event is for
-    this_event = Event.query.filter_by(ID = id).first()
-
-    this_group = this_event.hangoutgroup
-
-    if this_group in groups:
-        isEligible = True
-    
-    base_url = request.base_url
-    temp = base_url.index("event")
-    url = base_url[0:temp - 1]
-
-    form = CreateComment()
-
-    if form.validate_on_submit():
-
-        comment = Comment(
-            Creator_ID = current_user.Username,
-            Content = form.comment.data,
-            Event_ID = this_event.ID
-        )
-
-        db.session.add(comment)
-        db.session.commit()
-
-        return redirect(url_for('event.event', id=this_event.ID))
-
-    image_form = UploadImage()
-
-    if image_form.validate_on_submit():
-
-        if image_form.image.data is None:
-            flash("You need to upload an image!")
-            return redirect(url_for('event.event', id = id))
-
-        db_file_path = check_upload_file(image_form)
-
-        photo = Photo(
-            Image = db_file_path,
-            Creator_ID = current_user.ID,
-            Event_ID = id
-        )    
-
-        db.session.add(photo)
-        db.session.commit()
-
-    return render_template("event.html", Eligible = isEligible, event = this_event, exists = exists, url = url, form = form, image_form = image_form)
+    return render_template("event/view.html", event = Event.query.filter_by(ID = id).first())
 
 @eventbp.route('/delete', methods = ['POST'])
 def delete():
@@ -311,7 +227,7 @@ def edit(id):
     if this_event is None:
         return redirect(url_for('main.index'))
 
-    if form.validate_on_submit():
+    if form.validate_on_submit():        
         
         this_event.Name = form.title.data
         this_event.Description = form.description.data
@@ -329,9 +245,9 @@ def edit(id):
         db.session.commit()
 
         flash("You have updated the event!")
-        return redirect(url_for('event.event', id = id))
+        return redirect(url_for('main.index'))
     
-    return render_template("update.html", event = this_event, form = form)
+    return render_template("event/edit.html", event = this_event, form = form)
 
 
 

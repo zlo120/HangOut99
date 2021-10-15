@@ -5,6 +5,7 @@ from flask_login import current_user, login_user
 from flask_login.utils import login_required, login_user, logout_user
 from . import app, bcrypt, db, login_manager
 from .models import User, HangOutGroup, Event
+from .form import Login, Register
 from datetime import datetime
 
 # Load in user
@@ -25,8 +26,11 @@ mainbp = Blueprint('main', __name__)
 #       BOTH RETURN THE SAME THING
 
 # Main
-@mainbp.route('/')
+@mainbp.route('/', methods = ['GET', 'POST'])
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for('event.explore'))
+    
     user = None
     events = []
     groups = []
@@ -40,6 +44,10 @@ def index():
             groups.append(hangout)
             
     latest_event = None
+
+    login_form = Login()
+
+    register_form = Register()
     
     if user:
         # Query the interested_events table
@@ -75,4 +83,4 @@ def index():
             except ValueError:
                 pass
 
-    return render_template("index.html", User = user, Event = latest_event, groups = groups)
+    return render_template("index.html", User = user, Event = latest_event, groups = groups, login_form = login_form)
