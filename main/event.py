@@ -178,12 +178,14 @@ def create():
             location = None
             link = None
 
+        group = HangOutGroup.query.filter_by(Name = event_form.group.data).first()
+
         event = Event(
             Creator_ID = current_user.ID,
             Name = event_form.title.data,
             Description = event_form.description.data,
             DateTime = datetime,
-            Hangout_ID = event_form.group.data,
+            Hangout_ID = group,
             Location = location,
             Link = link
         )
