@@ -97,32 +97,6 @@ def logout():
 @login_required
 def account():    
 
-    user_id = None
-    deleteType = None
-
-    if request.method == 'POST':
-        req = request.get_json()        
-        
-        for key in req:
-            if key != 'GroupID' and key != 'EventID':
-                user_id = int(key)
-            else:
-                deleteType = key
-        
-        if user_id == current_user.ID and req[str(user_id)] == current_user.Username:
-            if deleteType == 'GroupID':
-                group = HangOutGroup.query.filter_by( Name = int(req[deleteType]) ).first()
-                db.session.delete(group)
-
-            elif deleteType == 'EventID':
-                event = Event.query.filter_by( Name = int(req[deleteType]) ).first()
-                db.session.delete(event)
-
-            db.session.commit()
-
-        else:
-            print("You are not authenticated")
-
     profilePic = url_for('static', filename = f"Profiles/{current_user.ProfilePic}.png")
 
     return render_template("user/account.html", profilePic = profilePic)

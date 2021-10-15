@@ -206,7 +206,7 @@
 {% if event.Creator_ID == current_user.ID %}
 function deleteEvent{{event.ID}}() {
     (async () => {
-    const rawResponse = await fetch('{{url_for('user.account')}}' , {
+    const rawResponse = await fetch('{{url_for('event.delete')}}' , {
         method: 'POST',
         headers: {
         'Accept': 'application/json',
@@ -231,7 +231,7 @@ function deleteEvent{{event.ID}}() {
 
 function deleteGroup{{group.ID}}() {
     (async () => {
-    const rawResponse = await fetch('{{url_for('user.account')}}' , {
+    const rawResponse = await fetch('{{url_for('hangout.delete')}}' , {
         method: 'POST',
         headers: {
         'Accept': 'application/json',

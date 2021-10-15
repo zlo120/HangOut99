@@ -49,23 +49,18 @@ def create():
 
 @hangoutbp.route("/delete", methods = ['POST'])
 def delete():
+    user_id = None
     if request.method == 'POST':
-        res = request.get_json()
-        this_user = None
-        this_group = None
-        for key in res:
-            this_user = User.query.filter_by(ID = key).first()
-            this_group = HangOutGroup.query.filter_by(ID = res[key]).first()
+        req = request.get_json()  
 
-        if this_user and this_group:
-            for event in this_group.Events:
-                db.engine.execute(f"DELETE FROM interested_events WHERE user_id = {current_user.get_id()} and event_id = {event.ID};")  
-                db.engine.execute(f"DELETE FROM unavailable_events WHERE user_id = {current_user.get_id()} and event_id = {event.ID};") 
+        for key in req:
+            if key != 'GroupID':
+                user_id = key
 
-            db.engine.execute(f"DELETE FROM hangoutgroups WHERE ID = {this_group.ID};")    
-            db.engine.execute(f"DELETE FROM events WHERE Hangout_ID = {this_group.ID};") 
-            db.engine.execute(f"DELETE FROM user_identifier WHERE user_id = {current_user.get_id()} and hangoutgroup_id = {this_group.ID};")
-                           
+        group = HangOutGroup.query.filter_by(ID = req['GroupID']).first() 
+
+        db.session.delete(group)
+        db.session.commit()
             
     return Response("Got it", status=201, mimetype='application/json')
 

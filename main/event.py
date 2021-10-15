@@ -208,16 +208,18 @@ def event(id):
 
 @eventbp.route('/delete', methods = ['POST'])
 def delete():
+    user_id = None
     if request.method == 'POST':
-        res = request.get_json()
-        event_id = None
-        for key in res:
-            event_id = res[key]
+        req = request.get_json()  
 
-        if event_id:  
-            db.engine.execute(f"DELETE FROM events WHERE ID = {event_id};")
-            db.engine.execute(f"DELETE FROM interested_events WHERE user_id = {current_user.get_id()} and event_id = {event_id};")  
-            db.engine.execute(f"DELETE FROM unavailable_events WHERE user_id = {current_user.get_id()} and event_id = {event_id};")  
+        for key in req:
+            if key != 'EventID':
+                user_id = key
+
+        event = Event.query.filter_by(ID = req['EventID']).first() 
+
+        db.session.delete(event)
+        db.session.commit()
             
     return Response("Got it", status=201, mimetype='application/json')
 
