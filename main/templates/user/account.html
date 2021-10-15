@@ -212,7 +212,7 @@ function deleteEvent{{event.ID}}() {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
         },
-        body: JSON.stringify( { {{current_user.ID}} : "{{ current_user.Username }}", "EventID" : "{{event.ID}}" } )
+        body: JSON.stringify( { {{current_user.ID}} : "{{ current_user.Username }}", "EventID" : "{{event.Name}}" } )
     });
 
     const content = await rawResponse.json();
@@ -237,7 +237,7 @@ function deleteGroup{{group.ID}}() {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
         },
-        body: JSON.stringify( { {{current_user.ID}} : "{{ current_user.Username }}", "GroupID" : "{{group.ID}}" } )
+        body: JSON.stringify( { {{current_user.ID}} : "{{ current_user.Username }}", "GroupID" : "{{group.Name}}" } )
     });
 
     const content = await rawResponse.json();
