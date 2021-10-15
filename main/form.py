@@ -15,7 +15,7 @@ def groups(current_user):
     groups = []
 
     for group in current_user.hangoutgroup:
-        groups.append( ( (group.ID), group.Name))
+        groups.append( ( (group.Name), group.Name))
 
     print(f"\n\nPrinting groups: {groups}\n\n")
     return groups

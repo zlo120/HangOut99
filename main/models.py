@@ -86,7 +86,7 @@ class Event(db.Model):
 
     Comments = db.relationship("Comment", backref="Event")
     Photos = db.relationship("Photo", backref="Event")
-    Hangout_ID = db.Column(db.Integer, db.ForeignKey('hangoutgroups.ID'))
+    Hangout_ID = db.Column(db.Integer, db.ForeignKey('hangoutgroups.Name'))
     
 
     def __repr__(self):
