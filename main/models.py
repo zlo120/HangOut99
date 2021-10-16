@@ -6,19 +6,19 @@ from . import db
 # Association tables
 user_identifier = db.Table(
     'user_identifier',
-    db.Column('hangoutgroup_id', db.Integer, db.ForeignKey('hangoutgroups.ID')),
+    db.Column('hangoutgroup_id', db.Integer, db.ForeignKey('hangoutgroups.ID', ondelete='CASCADE') ),
     db.Column('user_id', db.Integer, db.ForeignKey('users.ID'))
 )
 
 interested_event = db.Table (
     'interested_events',
-    db.Column('event_id', db.Integer, db.ForeignKey('events.ID')),
+    db.Column('event_id', db.Integer, db.ForeignKey('events.ID', ondelete='CASCADE') ),
     db.Column('user_id', db.Integer, db.ForeignKey('users.ID'))
 )
 
 unavailable_event = db.Table(
     'unavailable_events',
-    db.Column('event_id', db.Integer, db.ForeignKey('events.ID')),
+    db.Column('event_id', db.Integer, db.ForeignKey('events.ID', ondelete='CASCADE') ),
     db.Column('user_id', db.Integer, db.ForeignKey('users.ID'))
 )
 

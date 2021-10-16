@@ -57,14 +57,9 @@ def delete():
             if key != 'GroupID':
                 user_id = key
         res= req['GroupID']
-        print(f"\n\n\nreqGroupID: {res}\n\n\n")
 
         group = HangOutGroup.query.filter_by(Name = req['GroupID']).delete() 
-
-        # print(f"\n\n{group}\n\n")
-
-        # db.session.delete(group)
-        # db.session.commit()
+        db.session.commit()
 
     return Response("Got it", status=201, mimetype='application/json')
 

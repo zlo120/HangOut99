@@ -216,18 +216,9 @@ def delete():
             if key != 'EventID':
                 user_id = key
 
-        
-
-        event = Event.query.filter_by(Name = req['EventID']).first() 
-        db.session.commit(f"DELETE FROM interested_events WHERE event_id = {event.ID}")
-        db.session.commit(f"DELETE FROM unavailable_events WHERE event_id = {event.ID}")
-        event.delete()
-        
-        # print(f"\n\n{event}\n\n")
-
-        # db.session.delete(event)
-        # db.session.commit()
-            
+        event = Event.query.filter_by(Name = req['EventID']).delete() 
+        db.session.commit()
+                    
     return Response("Got it", status=201, mimetype='application/json')
 
 @eventbp.route('/edit/<int:id>', methods = ['GET', 'POST'])
