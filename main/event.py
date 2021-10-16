@@ -39,8 +39,6 @@ eventbp = Blueprint('event', __name__, url_prefix='/event')
 def interested():
     if request.method == "POST":
         res = request.get_json()
-
-        print(res)
         
         # Instance of User class
         this_user = None
@@ -104,8 +102,6 @@ def unavailable():
     if request.method == "POST":
         
         res = request.get_json()
-
-        print(res)
         
         # Instance of User class
         this_user = None
@@ -178,8 +174,6 @@ def explore():
 
     latest_event = None
 
-    print(event_dates)
-
     try:
         latest_date = min(event_dates)
         latest_event = Event.query.filter_by(DateTime = latest_date).first()
@@ -200,8 +194,6 @@ def create():
     event_form = createEventForm(current_user)
     
     if event_form.validate_on_submit():
-
-        print("\n\nValidated\n\n")
 
         # Creating a datetime object from the date + time forms
         datetime = createDateTimeObject( str(event_form.date.data) + ' ' + str(event_form.time.data) )

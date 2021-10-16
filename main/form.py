@@ -17,7 +17,6 @@ def groups(current_user):
     for group in current_user.hangoutgroup:
         groups.append( ( (group.Name), group.Name))
 
-    print(f"\n\nPrinting groups: {groups}\n\n")
     return groups
 
 def createEditForm(current_user, event):

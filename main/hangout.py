@@ -129,12 +129,11 @@ def join():
 def link(id):
 
     if not current_user.is_authenticated:
-        return redirect(url_for('user.register', next= url_for('hangout.link', id=id)))
+        return redirect(url_for('user.register', next = id))
 
     group = HangOutGroup.query.filter_by(JoinLink = id).first()
 
     if group is None:
-        print("This group doesn't exist")
         return redirect(url_for('event.explore'))
 
     if group in current_user.hangoutgroup:

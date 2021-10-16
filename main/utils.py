@@ -1,3 +1,4 @@
+from flask import redirect, request, url_for
 from datetime import datetime
 import os, string, random, smtplib, ssl, csv
 
@@ -57,6 +58,14 @@ def createDateTimeObject(time):
 
 def randomString(num):
     return ''.join(random.SystemRandom().choice(string.ascii_uppercase + string.digits + string.ascii_lowercase) for _ in range(num))
+
+def redirect_dest(fallback):
+    dest = request.args.get('next')
+    try:
+        dest_url = url_for( 'hangout.link', id = dest)
+    except Exception as e:
+        return redirect(fallback)
+    return redirect(dest_url)
 
 # send email
 def send_email(TOKEN, receiver, validationForm = True):

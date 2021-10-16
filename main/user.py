@@ -3,7 +3,7 @@ from flask_login import LoginManager, current_user, login_user, login_required, 
 from flask_wtf import FlaskForm
 
 from . import bcrypt, db
-from .utils import createDateTimeObject, send_email
+from .utils import redirect_dest
 from .models import User, Event, HangOutGroup
 from .form import Register, Login, DeleteGroup, DeleteEvent, editUser
 
@@ -56,7 +56,7 @@ def register():
 
         login_user(user, remember = True)
         flash("You are now logged in!")
-        return redirect(url_for('main.index'))
+        return redirect_dest(url_for('main.index'))
 
     return render_template("user/register.html", form = form)
 
@@ -78,8 +78,8 @@ def login():
 
         if user.Username == username and bcrypt.check_password_hash(user.Password, pwd):
             login_user(user, remember = True)
-            flash("You are now logged in!")
-            return redirect(url_for('main.index'))
+            
+            return redirect_dest(url_for('main.index'))
         else:
             flash("Incorrect password")
             return redirect(url_for('user.login'))
