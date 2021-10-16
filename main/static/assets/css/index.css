@@ -1857,14 +1857,18 @@ responsive
   border-radius: 23px;
   letter-spacing: 0.25px;
   border-top: 2px solid rgb(52, 170, 62)!important;
-  border-bottom: 2px solid rgb(52, 170, 62)!important;
+  border-bottom: 2px solid #4771cb!important;
   border-left: 2px solid rgb(52, 170, 62)!important;
   border-right: 2px solid rgb(52, 170, 62)!important;
   transition: all .3s;
 }
 
 .btn-success:hover {
-  background-color: rgb(44, 121, 51)!important;
-  color: #ffffff!important;
+  background-color: #fff!important;
+  border-top: 2px solid rgb(52, 170, 62)!important;
   border-bottom: 2px solid #33ccc5!important;
+  border-left: 2px solid rgb(52, 170, 62)!important;
+  border-right: 2px solid rgb(52, 170, 62)!important;
+  color: #1c3a7c!important;
+  
 }

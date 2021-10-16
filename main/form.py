@@ -67,8 +67,8 @@ class Login(FlaskForm):
     submit = SubmitField("Login")
 
 class CreateGroup(FlaskForm):
-    name = StringField ("Name *", validators=[InputRequired()], render_kw={"placeholder": "Name of the group"} )
-    pin = IntegerField("Pin (optional)", validators=[Optional()], render_kw={"placeholder": "Create a pin to join"})
+    name = StringField ("Name *", validators=[InputRequired(), Length(max=10, message="Max title length is 10")], render_kw={"placeholder": "Name of the group"} )
+    pin = IntegerField("Pin (optional)", validators=[Optional()], render_kw={"placeholder": "Pin"})
     submit = SubmitField("Create")
 
 class JoinGroup(FlaskForm):

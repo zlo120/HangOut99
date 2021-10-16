@@ -58,7 +58,28 @@ def delete():
                 user_id = key
         res= req['GroupID']
 
-        group = HangOutGroup.query.filter_by(Name = req['GroupID']).delete() 
+        group = HangOutGroup.query.filter_by(Name = req['GroupID']).first()
+        users = group.Users.copy()
+
+        for user in users:
+            group.Users.remove(user)
+
+        HangOutGroup.query.filter_by(Name = req['GroupID']).delete() 
+
+        events = Event.query.filter_by(Hangout_ID = req['GroupID']).all()
+
+        for event in events:
+            users_a = event.Users.copy()
+            users_b = event.UnavailableUsers.copy()
+
+            for user in users_a:
+                event.Users.remove(user)
+
+            for user in users_b:
+                event.UnavailableUsers.remove(user)
+
+            Event.query.filter_by(ID = event.ID).delete()
+
         db.session.commit()
 
     return Response("Got it", status=201, mimetype='application/json')
@@ -105,8 +126,11 @@ def join():
     return render_template("group/join.html", form = form)
 
 @hangoutbp.route("/link/<string:id>")
-@login_required
 def link(id):
+
+    if not current_user.is_authenticated:
+        return redirect(url_for('user.register', next= url_for('hangout.link', id=id)))
+
     group = HangOutGroup.query.filter_by(JoinLink = id).first()
 
     if group is None:
@@ -114,12 +138,12 @@ def link(id):
         return redirect(url_for('event.explore'))
 
     if group in current_user.hangoutgroup:
-        print("You're already in this group!")
+        return redirect(url_for('hangout.view', id=group.ID))
     else:
-        print("You're not in this group yet...")
-        return redirect(url_for('hangout.view', id = group.ID))
-
-    return redirect(url_for('hangout.view', id = group.ID))
+        # Add to the group
+        group.Users.append(current_user)
+        db.session.commit()
+        return redirect(url_for('hangout.view', id=group.ID))
     
 @hangoutbp.route("/explore")
 def explore():
@@ -127,9 +151,13 @@ def explore():
     return render_template("hangout.html", type="explore")
 
 @hangoutbp.route('/edit/<int:id>', methods = ['POST', 'GET'])
+@login_required
 def edit(id):
-    group = HangOutGroup.query.filter_by(ID = id).first()
 
+    
+    group = HangOutGroup.query.filter_by(ID = id).first()
+    if current_user.ID != group.Creator_ID:
+        return redirect(url_for('event.explore'))
     form = editGroup(group)
 
     if form.validate_on_submit():

@@ -44,7 +44,7 @@ def register():
             return redirect(url_for('user.register'))
 
         user = User(
-            ProfilePic = form.profile.data,
+            ProfilePic = url_for('static', filename=f"Profiles/{form.profile.data}.png"),
             Email = form_email,
             Username = form_username,
             Password = bcrypt.generate_password_hash(form_pwd).decode('utf-8'),
@@ -97,21 +97,23 @@ def logout():
 @login_required
 def account():    
 
-    profilePic = url_for('static', filename = f"Profiles/{current_user.ProfilePic}.png")
+    return render_template("user/account.html")
 
-    return render_template("user/account.html", profilePic = profilePic)
+@userbp.route('/profile/<int:id>')
+@login_required
+def profile(id):
+    return render_template('user/profile.html', user = User.query.filter_by(ID = id).first())
 
 @userbp.route('/edit', methods=['GET', 'POST'])
 @login_required
 def edit():
     form = editUser(current_user)
-    profilePic = url_for('static', filename = f"Profiles/{current_user.ProfilePic}.png")
 
     if form.validate_on_submit():
         
         user = User.query.filter_by(ID = current_user.ID).first()
 
-        user.ProfilePic = form.profile.data
+        user.ProfilePic = url_for('static', filename = f"Profiles/{form.profile.data}.png")
         
         if form.password.data is None:
             user.Password = form.password.data
@@ -120,4 +122,4 @@ def edit():
         db.session.commit()
         return redirect(url_for('user.account'))
 
-    return render_template('user/edit.html', form = form, profilePic = profilePic)
+    return render_template('user/edit.html', form = form)

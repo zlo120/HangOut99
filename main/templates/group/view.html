@@ -31,26 +31,41 @@
 
                 <h2 class="mb-2">{{group.Name}}</h2>
 
-                <a class="btn btn-secondary" href="{{ url_for('hangout.edit', id = group.ID) }}">Edit details</a>
-
                 <hr>
                 
+                <div class="row">
+                    <div class="col-6">
+                        <h6>Members</h6>
+                        <ul>
+                        {% for user in group.Users %}
+                            <li> <img class="mt-2" src="{{user.ProfilePic}}" height="50px" style="width:50px; border-radius:50px;" alt=""> <br>{{user.Username}}</li>
+                        {% endfor %}
+                        </ul>   
+                    </div>
+
+                    <div class="col-6">
+                        <h6>Pin</h6>
+
+                        <p class="mt-2" style="font-size: 2em;"><strong>{{group.Pin}}</strong></p>
+                    </div>
+                </div>
+
+                <hr>
+
                 <h4>Invitation Link</h4>
 
                 <input id="link" type="text" class="form-control" value="{{url_for('hangout.link', id = group.JoinLink , _external = True )  }}" readonly>
                 <button class="mt-1 btn btn-primary" onclick="copy()">Copy to clipboard</button>
 
+                <p class="mt-3 mb-3">Give this link to any user and they will instantly join this HangOut group.</p>
+
+                {% if current_user.ID == group.Creator_ID %}
+
                 <hr>
+                <a href=" {{url_for('hangout.edit', id=group.ID) }} " class="btn btn-secondary">Edit Details</a>
 
-                <div class="row">
-                    <div class="col-6">
-                        <h6>Members</h6>
-                    </div>
-
-                    <div class="col-6">
-                        <h6>Pin</h6>
-                    </div>
-                </div>
+                {% endif %}
+                
             </div>
         </div>
     </div>
