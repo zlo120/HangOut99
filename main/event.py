@@ -216,9 +216,9 @@ def delete():
             if key != 'EventID':
                 user_id = key
 
-        event = Event.query.filter_by(Name = req['EventID']).first() 
+        event = Event.query.filter_by(Name = req['EventID']).delete() 
 
-        print(f"\n\n{event}\n\n")
+        # print(f"\n\n{event}\n\n")
 
         # db.session.delete(event)
         # db.session.commit()
