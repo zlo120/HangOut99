@@ -64,8 +64,6 @@ def delete():
         for user in users:
             group.Users.remove(user)
 
-        HangOutGroup.query.filter_by(Name = req['GroupID']).delete() 
-
         events = Event.query.filter_by(Hangout_ID = req['GroupID']).all()
 
         for event in events:
@@ -79,6 +77,8 @@ def delete():
                 event.UnavailableUsers.remove(user)
 
             Event.query.filter_by(ID = event.ID).delete()
+
+        HangOutGroup.query.filter_by(Name = req['GroupID']).delete()         
 
         db.session.commit()
 
